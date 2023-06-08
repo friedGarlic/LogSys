@@ -42,7 +42,7 @@
             this.entryIDValue.Name = "entryIDValue";
             this.entryIDValue.Size = new System.Drawing.Size(241, 26);
             this.entryIDValue.TabIndex = 1;
-            this.entryIDValue.Text = "1900345";
+            this.entryIDValue.Text = "19-00345";
             this.entryIDValue.TextChanged += new System.EventHandler(this.entryIDValue_TextChanged);
             this.entryIDValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.entryIDValue_KeyDown);
             // 

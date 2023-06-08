@@ -15,12 +15,10 @@ namespace LogAppForms
 {
     public partial class AdminPass : Form
     {
-        private UserForm userForm;
-        public AdminPass(UserForm userForm)
+        public AdminPass()
         {
             InitializeComponent();
             textBox2.PasswordChar = '*';
-            this.userForm = userForm;
         }
 
         private SqlConnection _conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
@@ -43,18 +41,7 @@ namespace LogAppForms
                 if (dataTable.Rows.Count > 0)
                 {
                     password = textBox2.Text;
-
-                    UserModel user = new UserModel(
-                        userForm.studentID_value.Text,
-                        userForm.age_value.Text,
-                        userForm.contactInfo_value.Text,
-                        userForm.firstName_value.Text,
-                        userForm.lastName_value.Text
-                    );
-
-                    GlobalConfig.DataConnections.CreateUser(user);
-                    MessageBox.Show("Registered Successfuly");
-
+                    DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else

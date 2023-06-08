@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,23 +24,35 @@ namespace LogAppForms
         {
             if(validateForm())
             {
-                UserModel user = new UserModel(
-                        studentID_value.Text,
-                        age_value.Text,
-                        contactInfo_value.Text,
-                        firstName_value.Text,
-                        lastName_value.Text
-                    );  
+                AdminPass adminPass = new AdminPass();
 
-                GlobalConfig.DataConnections.CreateUser(user);
-                MessageBox.Show("Registered Successfuly");
-
-                this.Close();
+                if (adminPass.ShowDialog() == DialogResult.OK)
+                {
+                    CreateUser();
+                }
+                else
+                {
+                    this.Close();
+                }
             }
             else
             {
                 MessageBox.Show("Fill In The Forms Properly!");
             }
+        }
+        public void CreateUser()
+        {
+            UserModel user = new UserModel(
+                        studentID_value.Text,
+                        age_value.Text,
+                        contactInfo_value.Text,
+                        firstName_value.Text,
+                        lastName_value.Text
+                    );
+
+            GlobalConfig.DataConnections.CreateUser(user);
+            MessageBox.Show("Registered Successfuly");
+
         }
         public bool validateForm()
         {
