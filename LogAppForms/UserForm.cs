@@ -23,8 +23,16 @@ namespace LogAppForms
         {
             if(validateForm())
             {
-                AdminPass adminPass = new AdminPass(this);
-                adminPass.Show();
+                UserModel user = new UserModel(
+                        studentID_value.Text,
+                        age_value.Text,
+                        contactInfo_value.Text,
+                        firstName_value.Text,
+                        lastName_value.Text
+                    );  
+
+                GlobalConfig.DataConnections.CreateUser(user);
+                MessageBox.Show("Registered Successfuly");
 
                 this.Close();
             }
