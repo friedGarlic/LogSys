@@ -1,0 +1,11 @@
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\bin\Debug\LogAppForms.exe.config
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\bin\Debug\LogAppForms.exe
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\bin\Debug\LogAppForms.pdb
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.csproj.AssemblyReference.cache
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.csproj.SuggestedBindingRedirects.cache
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.EntryForm.resources
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.Properties.Resources.resources
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.csproj.GenerateResource.cache
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.csproj.CoreCompileInputs.cache
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.exe
+D:\Application_Development\LogAppLibrary\LogAppLibrary\LogAppForms\obj\Debug\LogAppForms.pdb
