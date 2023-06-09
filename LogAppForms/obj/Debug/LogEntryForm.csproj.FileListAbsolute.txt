@@ -73,3 +73,4 @@ C:\Users\Rem\Source\Repos\LogSys\LogAppForms\obj\Debug\LogAppForms.application
 C:\Users\Rem\Source\Repos\LogSys\LogAppForms\obj\Debug\LogEntryForm.csproj.CopyComplete
 C:\Users\Rem\Source\Repos\LogSys\LogAppForms\obj\Debug\LogAppForms.exe
 C:\Users\Rem\Source\Repos\LogSys\LogAppForms\obj\Debug\LogAppForms.pdb
+C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.AddItem.resources

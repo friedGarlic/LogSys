@@ -42,6 +42,7 @@ namespace LogAppForms
             PrintListView();
             //Print();
         }
+
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
             int x = 10;
@@ -249,6 +250,19 @@ namespace LogAppForms
                     }
                 }
             }
+        }
+
+        //inventory ---------------------------------------------------
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            AddItem addItem = new AddItem();
+            addItem.Show();
         }
     }
 }
