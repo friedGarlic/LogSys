@@ -99,6 +99,7 @@ namespace LogAppForms
                 printDocument.Print();
             }
         }
+
         void Print()
         {
             /*
@@ -256,9 +257,40 @@ namespace LogAppForms
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            PopulateDataGridView();
         }
+        private void PopulateDataGridView()
+        {
+            try
+            {
+                _conn.Open();
 
+                cmd = new SqlCommand("SELECT * FROM Items", _conn);
+                adapter = new SqlDataAdapter(cmd);
+                ds = new DataSet();
+                adapter.Fill(ds, "dbo.Items");
+                _conn.Close();
+                dt = ds.Tables["dbo.Items"];
+
+                dataGridView1.Columns.Clear();
+                dataGridView1.Rows.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred on opening a connection saying: " + ex.Message);
+            }
+            // add columns to the DataGridView
+            foreach (DataColumn column in dt.Columns)
+            {
+                dataGridView1.Columns.Add(column.ColumnName, column.ColumnName);
+            }
+
+            // add rows to the DataGridView
+            foreach (DataRow row in dt.Rows)
+            {
+                dataGridView1.Rows.Add(row.ItemArray);
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             AddItem addItem = new AddItem();

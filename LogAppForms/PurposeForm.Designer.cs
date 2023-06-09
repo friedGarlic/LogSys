@@ -32,8 +32,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.userControl11 = new LogAppForms.UserControl1();
             this.userControl21 = new LogAppForms.UserControl2();
+            this.userControl11 = new LogAppForms.UserControl1();
             this.SuspendLayout();
             // 
             // label1
@@ -83,27 +83,27 @@
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // userControl11
-            // 
-            this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.userControl11.Location = new System.Drawing.Point(245, 12);
-            this.userControl11.Name = "userControl11";
-            this.userControl11.Size = new System.Drawing.Size(560, 357);
-            this.userControl11.TabIndex = 6;
-            // 
             // userControl21
             // 
             this.userControl21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.userControl21.Location = new System.Drawing.Point(245, 12);
+            this.userControl21.Location = new System.Drawing.Point(233, 12);
             this.userControl21.Name = "userControl21";
-            this.userControl21.Size = new System.Drawing.Size(560, 357);
+            this.userControl21.Size = new System.Drawing.Size(347, 357);
             this.userControl21.TabIndex = 7;
+            // 
+            // userControl11
+            // 
+            this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.userControl11.Location = new System.Drawing.Point(233, 12);
+            this.userControl11.Name = "userControl11";
+            this.userControl11.Size = new System.Drawing.Size(190, 357);
+            this.userControl11.TabIndex = 6;
             // 
             // PurposeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(817, 381);
+            this.ClientSize = new System.Drawing.Size(609, 381);
             this.Controls.Add(this.userControl21);
             this.Controls.Add(this.userControl11);
             this.Controls.Add(this.radioButton2);

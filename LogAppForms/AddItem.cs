@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogAppLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,38 @@ namespace LogAppForms
         public AddItem()
         {
             InitializeComponent();
+        }
+
+        public void CreateItem()
+        {
+            if (validateForm())
+            {
+                ItemModel item = new ItemModel(
+                            textBox1.Text,
+                            numericUpDown1.Value
+                        );
+
+                GlobalConfig.DataConnections.CreateItem(item);
+                MessageBox.Show("Registered Successfuly");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CreateItem();
+        }
+        public bool validateForm()
+        {
+            if (textBox1.TextLength == 0)
+            {
+                return false;
+            }
+            if (numericUpDown1.Value <= 0) 
+            { 
+                return false; 
+            }
+
+            return true;
         }
     }
 }

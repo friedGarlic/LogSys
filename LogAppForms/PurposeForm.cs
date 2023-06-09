@@ -15,6 +15,8 @@ namespace LogAppForms
     {
         private string timeIn = "Time In";
         private string timeOut = "Time Out";
+        private string Borrow = "Borrow";
+        private string Return = "Return";
         private EntryForm entryForm;
 
         public PurposeForm(EntryForm entryForm)
@@ -23,14 +25,25 @@ namespace LogAppForms
             Size = new Size(257, 420);
             this.entryForm = entryForm;
         }
+        public PurposeForm()
+        {
+            InitializeComponent();
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if(radioButton2.Checked == true)
             {
-                //Equipment equipment = new Equipment();
-                //equipment.Show();
-                MessageBox.Show("Not Available Right Now!");
+                string val = "";
+                if (userControl21.radioButton1.Checked == true)
+                {
+                    val = Borrow;
+                }
+                if (userControl21.radioButton2.Checked == true)
+                {
+                    val = Return;
+                }
+                PurposeModel model = new PurposeModel(val);
             }
             if(radioButton1.Checked == true)
             {
@@ -63,7 +76,7 @@ namespace LogAppForms
             }
             if (radioButton2.Checked == true)
             {
-                Size = new Size(800, 420);
+                Size = new Size(625, 420);
                 userControl11.Hide();
                 userControl21.Show();
             }
@@ -79,11 +92,10 @@ namespace LogAppForms
             }
             if (radioButton2.Checked == true)
             {
-                Size = new Size(800, 420);
+                Size = new Size(625, 420);
                 userControl11.Hide();
                 userControl21.Show();
             }
         }
-
     }
 }
