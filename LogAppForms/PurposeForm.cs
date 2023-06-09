@@ -35,18 +35,23 @@ namespace LogAppForms
             if(radioButton2.Checked == true)
             {
                 string val = "";
+                decimal q = 0;
+                string cmb = "";
                 if (userControl21.radioButton1.Checked == true)
                 {
                     val = Borrow;
+                    q = userControl21.numericUpDown1.Value;
+                    cmb = userControl21.comboBox1.Text;
                 }
                 if (userControl21.radioButton2.Checked == true)
                 {
                     val = Return;
+                    q = userControl21.numericUpDown1.Value;
+                    cmb = userControl21.comboBox1.Text;
                 }
-                PurposeModel model = new PurposeModel(val);
+                PurposeModel model = new PurposeModel(q,val,cmb);
                 UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-
-                GlobalConfig.DataConnections.CurrentTime(u_model, model);
+                GlobalConfig.DataConnections.CreatePurpose(u_model, model);
                 MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
                 Close();
             }

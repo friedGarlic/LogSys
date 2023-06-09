@@ -60,6 +60,7 @@ namespace LogAppForms
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.button5 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.Inventory.SuspendLayout();
@@ -193,6 +194,7 @@ namespace LogAppForms
             // 
             // Inventory
             // 
+            this.Inventory.Controls.Add(this.button5);
             this.Inventory.Controls.Add(this.dataGridView1);
             this.Inventory.Controls.Add(this.button3);
             this.Inventory.Controls.Add(this.button2);
@@ -258,9 +260,9 @@ namespace LogAppForms
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.Blue;
-            this.button3.Location = new System.Drawing.Point(687, 18);
+            this.button3.Location = new System.Drawing.Point(571, 18);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(97, 23);
+            this.button3.Size = new System.Drawing.Size(88, 23);
             this.button3.TabIndex = 4;
             this.button3.Text = "+ Add Item";
             this.button3.UseVisualStyleBackColor = true;
@@ -325,6 +327,22 @@ namespace LogAppForms
             this.columnHeader4.Text = "Quantity";
             this.columnHeader4.Width = 80;
             // 
+            // button5
+            // 
+            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button5.FlatAppearance.BorderSize = 0;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.ForeColor = System.Drawing.Color.Red;
+            this.button5.Location = new System.Drawing.Point(671, 18);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(119, 23);
+            this.button5.TabIndex = 6;
+            this.button5.Text = "- Remove Item";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -374,5 +392,6 @@ namespace LogAppForms
         private DataGridViewTextBoxColumn Column4;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader4;
+        private Button button5;
     }
 }

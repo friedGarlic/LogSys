@@ -18,11 +18,19 @@ namespace LogAppForms
                 UserModel model = new UserModel(entryIDValue.Text);
                 if (IsValidForm())
                 {
-                    GlobalConfig.DataConnections.CurrentTime(model);
+                    UserModel m1 = new UserModel();
+                    if (GlobalConfig.DataConnections.IsNotRegistered(m1))
+                    {
+                        GlobalConfig.DataConnections.CurrentTime(model);
+                        PurposeForm purposeForm = new PurposeForm(this);
+                        purposeForm.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Your ID is not registered, Ask the Admin for more information", "Get an Administrator for more information", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
 
                 }
-                PurposeForm purposeForm = new PurposeForm(this);
-                purposeForm.Show();
             }
             else
             {

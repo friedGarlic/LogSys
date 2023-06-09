@@ -28,7 +28,15 @@ namespace LogAppForms
 
                 if (adminPass.ShowDialog() == DialogResult.OK)
                 {
-                    CreateUser();
+                    UserModel m1 = new UserModel();
+                    if (GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
+                    {
+                        CreateUser();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Your ID is already registered, Ask the Admin for more information","Get an Administrator for more information", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 else
                 {
@@ -53,6 +61,11 @@ namespace LogAppForms
             GlobalConfig.DataConnections.CreateUser(user);
             MessageBox.Show("Registered Successfuly");
 
+        }
+        private bool IsStudentIdDuplicate(UserModel user)
+        {
+            user = new UserModel(studentID_value.Text);
+            return GlobalConfig.DataConnections.IsStudentIdDuplicate(user);
         }
         public bool validateForm()
         {

@@ -62,6 +62,7 @@ C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.AdminLogIn.re
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.AdminPass.resources
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.Properties.Resources.resources
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.PurposeForm.resources
+C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.RemoveItem.resources
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.UserControl1.resources
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.UserControl2.resources
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.UserForm.resources

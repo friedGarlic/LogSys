@@ -29,6 +29,7 @@ namespace LogAppForms
 
                 GlobalConfig.DataConnections.CreateItem(item);
                 MessageBox.Show("Registered Successfuly");
+                this.Close();
             }
         }
 

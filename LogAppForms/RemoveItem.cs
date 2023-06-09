@@ -6,26 +6,37 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LogAppForms
 {
-    public partial class UserControl2 : UserControl
+    public partial class RemoveItem : Form
     {
         private SqlConnection _conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
         private SqlCommand cmd;
         private SqlDataAdapter adapter;
         private DataSet ds;
 
-        public UserControl2()
+        public RemoveItem()
         {
             InitializeComponent();
         }
 
-        private void UserControl2_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ItemModel item = new ItemModel(
+                            comboBox1.Text,
+                            numericUpDown1.Value
+                        );
+
+            GlobalConfig.DataConnections.RemoveItem(item);
+            MessageBox.Show("Registered Successfuly");
+            this.Close();
+        }
+
+        private void RemoveItem_Load(object sender, EventArgs e)
         {
             _conn.Open();
             cmd = new SqlCommand("SELECT * FROM Items", _conn);
@@ -39,6 +50,5 @@ namespace LogAppForms
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "ItemName";
         }
-
     }
 }

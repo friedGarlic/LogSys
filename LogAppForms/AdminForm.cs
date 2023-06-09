@@ -29,10 +29,15 @@ namespace LogAppForms
             }
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            RemoveItem removeItem = new RemoveItem();
+            removeItem.Show();
+        }
+
         public AdminForm()
         {
             InitializeComponent();
-
             printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
         }
@@ -40,16 +45,16 @@ namespace LogAppForms
         private void button4_Click(object sender, EventArgs e)
         {
             PrintListView();
-            //Print();
         }
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
             int x = 10;
             int y = 10;
-            int cellPadding = 25;
-            int cellHeight = 50;
+            int cellPadding = 20;
+            int cellHeight = 40;
 
+            int rowCount = listView1.Items.Count;
             int columnCount = listView1.Columns.Count;
             int[] columnWidths = new int[columnCount];
             int tableWidth = 0;
@@ -76,12 +81,25 @@ namespace LogAppForms
             foreach (ListViewItem item in listView1.Items)
             {
                 x = 10;
-                for (int i = 0; i < columnCount; i++)
+                int currentColumnCount = item.SubItems.Count; // Get the number of columns for the current row
+
+                for (int i = 0; i < currentColumnCount; i++)
                 {
                     string cellText = item.SubItems[i].Text;
                     e.Graphics.DrawRectangle(Pens.Black, new Rectangle(x, y, columnWidths[i], cellHeight));
                     e.Graphics.DrawString(cellText, Font, Brushes.Black, new Rectangle(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight));
                     x += columnWidths[i];
+                }
+
+                // Handle extra columns for rows with fewer columns
+                if (currentColumnCount < columnCount)
+                {
+                    int remainingColumns = columnCount - currentColumnCount;
+                    for (int i = 0; i < remainingColumns; i++)
+                    {
+                        e.Graphics.DrawRectangle(Pens.Black, new Rectangle(x, y, columnWidths[currentColumnCount + i], cellHeight));
+                        x += columnWidths[currentColumnCount + i];
+                    }
                 }
 
                 y += cellHeight;
@@ -96,10 +114,11 @@ namespace LogAppForms
             PrintDialog printDialog = new PrintDialog();
             if (printDialog.ShowDialog() == DialogResult.OK)
             {
+                PrintDocument printDocument = new PrintDocument();
+                printDocument.PrintPage += PrintDocument_PrintPage;
                 printDocument.Print();
             }
         }
-
         void Print()
         {
             /*
@@ -166,31 +185,57 @@ namespace LogAppForms
 
             if (string.IsNullOrEmpty(value))
             {
+                
                 dataView2.RowFilter = string.Format("Convert([StudentIdNumber], System.String) LIKE '%{0}%'", value);
                 HashSet<string> uniqueItems = new HashSet<string>();//stores address
 
-                foreach (DataRow dr in dataView2.ToTable().Rows)
+                foreach (DataRow dr3 in dataView3.ToTable().Rows)
                 {
-                    string studentIdNumber = dr[1].ToString(); //store the value of what column StudentIdNumber of each row on above 'foreach'
-                    DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'"); //combine StudentID and StudentIdNumber of 2 different table with the same value
-
-                    foreach (DataRow dr2 in relatedRows)
+                    foreach (DataRow dr in dataView2.ToTable().Rows)
                     {
-                        string itemText = $"{dr[1]} {dr[2]}";
+                        string studentIdNumber = dr[1].ToString(); //store the value of what column StudentIdNumber of each row on above 'foreach'
+                        DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'"); //combine StudentID and StudentIdNumber of 2 different table with the same value
 
-                        if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                        foreach (DataRow dr2 in relatedRows)
                         {
-                            listView1.Items.Add(new ListViewItem(new string[]
-                            {
-                                dr[1].ToString(),
-                                dr[2].ToString(),
-                                dr[3].ToString(),
-                                dr2[3].ToString(),
-                                dr2[4].ToString(),
-                                dr2[5].ToString()
-                            }));
+                            string itemText = $"{dr[1]} {dr[2]}";
 
-                            uniqueItems.Add(itemText); // add to array if unique
+                            if (dr[3].ToString().Contains("Borrow") || dr[3].ToString().Contains("Return"))
+                            {
+                                if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString(),
+                                    dr[4].ToString(),
+                                    dr[5].ToString()
+                                    }));
+
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
+                            else
+                            {
+                                if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString()
+                                    }));
+
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
                         }
                     }
                 }
@@ -200,28 +245,51 @@ namespace LogAppForms
                 dataView2.RowFilter = string.Format("Convert([CurDateTime], System.String) LIKE '%{0}%'", value);
                 HashSet<string> uniqueItems = new HashSet<string>();
 
-                foreach (DataRow dr in dataView2.ToTable().Rows)
+                foreach (DataRow dr3 in dataView3.ToTable().Rows)
                 {
-                    string studentIdNumber = dr[1].ToString();
-                    DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'");
-
-                    foreach (DataRow dr2 in relatedRows)
+                    foreach (DataRow dr in dataView2.ToTable().Rows)
                     {
-                        string itemText = $"{dr[1]} {dr[2]}";
+                        string studentIdNumber = dr[1].ToString(); //store the value of what column StudentIdNumber of each row on above 'foreach'
+                        DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'"); //combine StudentID and StudentIdNumber of 2 different table with the same value
 
-                        if (!uniqueItems.Contains(itemText)) 
+                        foreach (DataRow dr2 in relatedRows)
                         {
-                            listView1.Items.Add(new ListViewItem(new string[]
-                            {
-                                dr[1].ToString(),
-                                dr[2].ToString(),
-                                dr[3].ToString(),
-                                dr2[3].ToString(),
-                                dr2[4].ToString(),
-                                dr2[5].ToString()
-                            }));
+                            string itemText = $"{dr[1]} {dr[2]}";
 
-                            uniqueItems.Add(itemText);
+                            if (dr[3].ToString().Contains("Borrow"))
+                            {
+                                if (!uniqueItems.Contains(itemText) || dr[3].ToString().Contains("Return")) //check if theres unique adress in that item if not unique it wont do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString()
+                                    }));
+
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
+                            else
+                            {
+                                if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString()
+                                    }));
+
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
                         }
                     }
                 }
@@ -234,25 +302,50 @@ namespace LogAppForms
 
                 HashSet<string> uniqueItems = new HashSet<string>();
 
-                foreach (DataRow dr in dataView2.ToTable().Rows)
+                foreach (DataRow dr3 in dataView3.ToTable().Rows)
                 {
-                    foreach (DataRow dr2 in dataView.ToTable().Rows)
+                    foreach (DataRow dr in dataView2.ToTable().Rows)
                     {
-                        string itemText = $"{dr[1]} {dr[2]}";
-
-                        if (!uniqueItems.Contains(itemText))
+                        foreach (DataRow dr2 in dataView.ToTable().Rows)
                         {
-                            listView1.Items.Add(new ListViewItem(new string[]
+                            string itemText = $"{dr[1]} {dr[2]}";
+
+                            if (dr[3].ToString().Contains("Borrow") || dr[3].ToString().Contains("Return"))
                             {
+                                if (!uniqueItems.Contains(itemText)) //check if there's a unique address in that item if not unique it won't do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
+                                dr[1].ToString(),
+                                dr[2].ToString(),
+                                dr[3].ToString(),
+                                dr2[3].ToString(),
+                                dr2[4].ToString(),
+                                dr2[5].ToString(),
+                                dr[4].ToString(),
+                                dr[5].ToString()
+                                    }));
+
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
+                            else
+                            {
+                                if (!uniqueItems.Contains(itemText)) //check if there's a unique address in that item if not unique it won't do anything
+                                {
+                                    listView1.Items.Add(new ListViewItem(new string[]
+                                    {
                                 dr[1].ToString(),
                                 dr[2].ToString(),
                                 dr[3].ToString(),
                                 dr2[3].ToString(),
                                 dr2[4].ToString(),
                                 dr2[5].ToString()
-                            }));
+                                    }));
 
-                            uniqueItems.Add(itemText);
+                                    uniqueItems.Add(itemText); // add to array if unique
+                                }
+                            }
                         }
                     }
                 }
