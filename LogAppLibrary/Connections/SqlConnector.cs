@@ -52,6 +52,21 @@ namespace LogAppLibrary
                 return user_model;
             }
         }
+        public ItemModel CreateItem(ItemModel item_model)
+        {
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ItemName", item_model.ItemName);
+                p.Add("@Quantity", item_model.Quantity);
+                p.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
+                dbConnection.Execute("dbo.spItemData", p, commandType: CommandType.StoredProcedure);
+
+                item_model.Id = p.Get<int>("@id");
+
+                return item_model;
+            }
+        }
     }
 }
