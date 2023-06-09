@@ -58,6 +58,8 @@ namespace LogAppForms
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.Inventory.SuspendLayout();
@@ -118,7 +120,9 @@ namespace LogAppForms
             this.columnHeader1,
             this.columnHeader3,
             this.columnHeader6,
-            this.columnHeader7});
+            this.columnHeader7,
+            this.columnHeader2,
+            this.columnHeader4});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(8, 50);
             this.listView1.Name = "listView1";
@@ -147,17 +151,17 @@ namespace LogAppForms
             // columnHeader3
             // 
             this.columnHeader3.Text = "Contact Information";
-            this.columnHeader3.Width = 108;
+            this.columnHeader3.Width = 120;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "Last Name";
-            this.columnHeader6.Width = 75;
+            this.columnHeader6.Width = 90;
             // 
             // columnHeader7
             // 
             this.columnHeader7.Text = "First Name";
-            this.columnHeader7.Width = 75;
+            this.columnHeader7.Width = 90;
             // 
             // comboBox1
             // 
@@ -311,6 +315,16 @@ namespace LogAppForms
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Item";
+            this.columnHeader2.Width = 90;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Quantity";
+            this.columnHeader4.Width = 80;
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -358,5 +372,7 @@ namespace LogAppForms
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader4;
     }
 }

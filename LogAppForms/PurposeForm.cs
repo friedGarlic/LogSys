@@ -44,6 +44,11 @@ namespace LogAppForms
                     val = Return;
                 }
                 PurposeModel model = new PurposeModel(val);
+                UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+
+                GlobalConfig.DataConnections.CurrentTime(u_model, model);
+                MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
+                Close();
             }
             if(radioButton1.Checked == true)
             {

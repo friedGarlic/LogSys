@@ -14,11 +14,11 @@ namespace LogAppForms
     public partial class AdminForm : Form
     {
         private SqlConnection _conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
-        private SqlCommand cmd, cmd2;
-        private DataTable dt, dt2;
-        private SqlDataAdapter adapter,adapter2;
-        private DataSet ds,ds2;
-        private DataView dataView,dataView2;
+        private SqlCommand cmd, cmd2, cmd3;
+        private DataTable dt, dt2, dt3;
+        private SqlDataAdapter adapter,adapter2, adapter3;
+        private DataSet ds, ds2, ds3;
+        private DataView dataView,dataView2, dataView3;
         private PrintDocument printDocument;
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -131,23 +131,29 @@ namespace LogAppForms
             _conn.Open();
             cmd = new SqlCommand("SELECT * FROM Students", _conn);
             cmd2 = new SqlCommand("SELECT * FROM DateTimeTable", _conn);
+            cmd3 = new SqlCommand("SELECT * FROM Items", _conn);
 
             adapter = new SqlDataAdapter(cmd);
             adapter2 = new SqlDataAdapter(cmd2);
+            adapter3 = new SqlDataAdapter(cmd3);
 
             ds = new DataSet();
             ds2 = new DataSet();
+            ds3 = new DataSet();
 
             adapter.Fill(ds, "dbo.Students");
             adapter2.Fill(ds2, "dbo.DateTimeTable");
-
+            adapter3.Fill(ds3, "dbo.Items");
+            
             _conn.Close();
 
             dt = ds.Tables["dbo.Students"];
             dt2 = ds2.Tables["dbo.DateTimeTable"];
+            dt3 = ds3.Tables["dbo.Items"];
 
             dataView = new DataView(dt);
             dataView2 = new DataView(dt2);
+            dataView3 = new DataView(dt3);
 
             filter();
         }
