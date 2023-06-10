@@ -150,18 +150,5 @@ namespace LogAppLibrary
                 return count > 0;
             }
         }
-        public bool IsNotRegistered(UserModel user_model) //when entering id for log
-        {
-            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
-            {
-                var p = new DynamicParameters();
-                p.Add("@StudentID", user_model.student_ID);
-
-                string query = "SELECT COUNT(*) FROM Students WHERE StudentID != @StudentID";
-                int count = dbConnection.ExecuteScalar<int>(query, p);
-
-                return count == 0;
-            }
-        }
     }
 }

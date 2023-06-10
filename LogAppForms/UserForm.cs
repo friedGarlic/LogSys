@@ -28,8 +28,8 @@ namespace LogAppForms
 
                 if (adminPass.ShowDialog() == DialogResult.OK)
                 {
-                    UserModel m1 = new UserModel();
-                    if (GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
+                    UserModel m1 = new UserModel(studentID_value.Text);
+                    if (!GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
                     {
                         CreateUser();
                     }
