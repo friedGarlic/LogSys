@@ -1,5 +1,6 @@
 ﻿using LogAppLibrary;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace LogAppForms
@@ -11,19 +12,24 @@ namespace LogAppForms
             InitializeComponent();
         }
 
+        private void LogIn()
+        {
+            UserModel model = new UserModel(entryIDValue.Text);
+
+            GlobalConfig.DataConnections.CurrentTime(model);
+            PurposeForm purposeForm = new PurposeForm(this);
+            purposeForm.Show();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             if (IsValidForm() == true)
             {
-                UserModel model = new UserModel(entryIDValue.Text);
                 if (IsValidForm())
                 {
-                    UserModel m1 = new UserModel();
-                    if (GlobalConfig.DataConnections.IsNotRegistered(m1))
+                    UserModel m1 = new UserModel(entryIDValue.Text);
+                    if (GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
                     {
-                        GlobalConfig.DataConnections.CurrentTime(model);
-                        PurposeForm purposeForm = new PurposeForm(this);
-                        purposeForm.Show();
+                        LogIn();
                     }
                     else
                     {

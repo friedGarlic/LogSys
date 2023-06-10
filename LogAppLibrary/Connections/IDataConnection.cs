@@ -16,6 +16,5 @@
 
         bool IsItemDuplicate(ItemModel item_model);
         bool IsStudentIdDuplicate(UserModel usermodel);
-        bool IsNotRegistered(UserModel user_model);
     }
 }

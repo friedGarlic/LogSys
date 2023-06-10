@@ -160,7 +160,7 @@ namespace LogAppLibrary
                 string query = "SELECT COUNT(*) FROM Students WHERE StudentID != @StudentID";
                 int count = dbConnection.ExecuteScalar<int>(query, p);
 
-                return count > 0;
+                return count == 0;
             }
         }
     }
