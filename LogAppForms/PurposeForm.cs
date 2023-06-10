@@ -22,7 +22,7 @@ namespace LogAppForms
         public PurposeForm(EntryForm entryForm)
         {
             InitializeComponent();
-            Size = new Size(257, 420);
+            Size = new Size(230, 420);
             this.entryForm = entryForm;
         }
         public PurposeForm()
@@ -32,48 +32,55 @@ namespace LogAppForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(radioButton2.Checked == true)
+            if (ValidateForm()) 
             {
-                string val = "";
-                decimal q = 0;
-                string cmb = "";
-                if (userControl21.radioButton1.Checked == true)
+                if (radioButton2.Checked == true)
                 {
-                    val = Borrow;
-                    q = userControl21.numericUpDown1.Value;
-                    cmb = userControl21.comboBox1.Text;
-                }
-                if (userControl21.radioButton2.Checked == true)
-                {
-                    val = Return;
-                    q = userControl21.numericUpDown1.Value;
-                    cmb = userControl21.comboBox1.Text;
-                }
-                PurposeModel model = new PurposeModel(q,val,cmb);
-                UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-                GlobalConfig.DataConnections.CreatePurpose(u_model, model);
-                MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
-                Close();
+                    string val = "";
+                    decimal q = 0;
+                    string cmb = "";
+                    if (userControl21.radioButton1.Checked == true)
+                    {
+                        val = Borrow;
+                        q = userControl21.numericUpDown1.Value;
+                        cmb = userControl21.comboBox1.Text;
+                    }
+                    if (userControl21.radioButton2.Checked == true)
+                    {
+                        val = Return;
+                        q = userControl21.numericUpDown1.Value;
+                        cmb = userControl21.comboBox1.Text;
+                    }
+                    PurposeModel model = new PurposeModel(q, val, cmb);
+                    UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+                    GlobalConfig.DataConnections.CreatePurpose(u_model, model);
+                    MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
+                    Close();
 
+                }
+                if (radioButton1.Checked == true)
+                {
+                    string val = "";
+                    if (userControl11.radioButton1.Checked == true)
+                    {
+                        val = timeIn;
+                    }
+                    if (userControl11.radioButton2.Checked == true)
+                    {
+                        val = timeOut;
+                    }
+                    PurposeModel model = new PurposeModel(val);
+                    UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+
+                    GlobalConfig.DataConnections.CurrentTime(u_model, model);
+                    MessageBox.Show("Success, Mind the other students!");
+
+                    Close();
+                }
             }
-            if(radioButton1.Checked == true)
+            else
             {
-                string val = "";
-                if(userControl11.radioButton1.Checked == true)
-                {
-                    val = timeIn;
-                }
-                if(userControl11.radioButton2.Checked == true)
-                {
-                    val = timeOut;
-                }
-                PurposeModel model = new PurposeModel(val);
-                UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-
-                GlobalConfig.DataConnections.CurrentTime(u_model, model);
-                MessageBox.Show("Success, Mind the other students!");
-                
-                Close();
+                MessageBox.Show("Fill up properly");
             }
         }
 
@@ -97,7 +104,7 @@ namespace LogAppForms
         {
             if (radioButton1.Checked == true)
             {
-                Size = new Size(205, 357);
+                Size = new Size(462, 420);
                 userControl11.Show();
                 userControl21.Hide();
             }
@@ -107,6 +114,26 @@ namespace LogAppForms
                 userControl11.Hide();
                 userControl21.Show();
             }
+        }
+        public bool ValidateForm()
+        {
+            if(userControl21.numericUpDown1.Value == 0)
+            {
+                return false;
+            }
+            if (userControl21.comboBox1.Text.Length == 0)
+            {
+                return false;
+            }
+            if(!userControl21.radioButton1.Checked)
+            {
+                return false;
+            }
+            if(!userControl21.radioButton2.Checked)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

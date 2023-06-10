@@ -15,7 +15,6 @@ namespace LogAppForms
 {
     public partial class UserControl2 : UserControl
     {
-        private SqlConnection _conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
         private SqlCommand cmd;
         private SqlDataAdapter adapter;
         private DataSet ds;
@@ -27,12 +26,14 @@ namespace LogAppForms
 
         private void UserControl2_Load(object sender, EventArgs e)
         {
-            _conn.Open();
-            cmd = new SqlCommand("SELECT * FROM Items", _conn);
+            SqlConnection conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
+
+            conn.Open();
+            cmd = new SqlCommand("SELECT * FROM Items", conn);
             adapter = new SqlDataAdapter(cmd);
             ds = new DataSet();
             adapter.Fill(ds, "dbo.Items");
-            _conn.Close();
+            conn.Close();
 
             DataTable dt = ds.Tables["dbo.Items"];
 

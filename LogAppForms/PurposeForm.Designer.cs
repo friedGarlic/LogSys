@@ -83,7 +83,7 @@
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // userControl21
+            // userControl11
             // 
             this.userControl21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.userControl21.Location = new System.Drawing.Point(233, 12);
@@ -91,7 +91,7 @@
             this.userControl21.Size = new System.Drawing.Size(347, 357);
             this.userControl21.TabIndex = 7;
             // 
-            // userControl11
+            // userControl21
             // 
             this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.userControl11.Location = new System.Drawing.Point(233, 12);
@@ -104,8 +104,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(609, 381);
+            this.Controls.Add(this.userControl11); 
             this.Controls.Add(this.userControl21);
-            this.Controls.Add(this.userControl11);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.button1);

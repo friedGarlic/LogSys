@@ -80,5 +80,6 @@ namespace LogAppForms
                 GlobalConfig.DataConnections.AddQuantityItem(item);
             }
         }
+
     }
 }
