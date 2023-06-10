@@ -26,14 +26,20 @@ namespace LogAppForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ItemModel item = new ItemModel(
+            DialogResult result = MessageBox.Show("You will decrease a Quantity of an Item. Do you want to proceed?",
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                ItemModel item = new ItemModel(
                             comboBox1.Text,
                             numericUpDown1.Value
                         );
 
-            GlobalConfig.DataConnections.RemoveItem(item);
-            MessageBox.Show("Subtracted Quantity");
-            this.Close();
+                GlobalConfig.DataConnections.RemoveItem(item);
+                MessageBox.Show("Subtracted Quantity");
+                this.Close();
+            }
         }
 
         private void RemoveItem_Load(object sender, EventArgs e)
@@ -53,14 +59,20 @@ namespace LogAppForms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ItemModel item = new ItemModel(
+            DialogResult result = MessageBox.Show("You will remove an item from the database. Do you want to proceed?", 
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes) 
+            {
+                ItemModel item = new ItemModel(
                             comboBox1.Text,
                             numericUpDown1.Value
                         );
 
-            GlobalConfig.DataConnections.RemoveItemName(item);
-            MessageBox.Show("Removed Item");
-            this.Close();
+                GlobalConfig.DataConnections.RemoveItemName(item);
+                MessageBox.Show("Removed Item");
+                this.Close();
+            }
         }
     }
 }

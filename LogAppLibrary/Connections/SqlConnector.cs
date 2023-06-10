@@ -66,6 +66,7 @@ namespace LogAppLibrary
                 return user_model;
             }
         }
+
         public ItemModel CreateItem(ItemModel item_model) //adding/creating item to item table
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
@@ -82,6 +83,20 @@ namespace LogAppLibrary
                 return item_model;
             }
         }
+        public ItemModel AddQuantityItem(ItemModel item_model)
+        {
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ItemName", item_model.ItemName);
+                p.Add("@Quantity", item_model.Quantity);
+
+                dbConnection.Execute("dbo.spAddItemQuantity", p, commandType: CommandType.StoredProcedure);
+
+                return item_model;
+            }
+        } //self description
+
         public ItemModel RemoveItem(ItemModel item_model) //remove quantity of item
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
@@ -105,6 +120,20 @@ namespace LogAppLibrary
                 dbConnection.Execute("dbo.spRemoveItemName", p, commandType: CommandType.StoredProcedure);
 
                 return item_model;
+            }
+        }
+
+        public bool IsItemDuplicate(ItemModel item_model) //self description
+        {
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ItemName", item_model.ItemName);
+
+                string query = "SELECT COUNT(*) FROM Items WHERE ItemName = @ItemName";
+                int count = dbConnection.ExecuteScalar<int>(query, p);
+
+                return count > 0;
             }
         }
 

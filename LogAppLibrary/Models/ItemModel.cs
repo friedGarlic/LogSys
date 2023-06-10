@@ -11,6 +11,10 @@ namespace LogAppLibrary
         public int BorrowerQuantity { get; set; }
 
         public ItemModel() { }
+        public ItemModel(string item_name)
+        {
+            ItemName = item_name;
+        }
         public ItemModel(string item_name, decimal quantity)
         {
             int quantity_val = Convert.ToInt32(Math.Round(quantity));
