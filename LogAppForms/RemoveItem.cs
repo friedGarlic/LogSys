@@ -32,7 +32,7 @@ namespace LogAppForms
                         );
 
             GlobalConfig.DataConnections.RemoveItem(item);
-            MessageBox.Show("Registered Successfuly");
+            MessageBox.Show("Subtracted Quantity");
             this.Close();
         }
 
@@ -49,6 +49,18 @@ namespace LogAppForms
 
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "ItemName";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ItemModel item = new ItemModel(
+                            comboBox1.Text,
+                            numericUpDown1.Value
+                        );
+
+            GlobalConfig.DataConnections.RemoveItemName(item);
+            MessageBox.Show("Removed Item");
+            this.Close();
         }
     }
 }

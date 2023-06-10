@@ -54,6 +54,7 @@ namespace LogAppForms
                 GlobalConfig.DataConnections.CreatePurpose(u_model, model);
                 MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
                 Close();
+
             }
             if(radioButton1.Checked == true)
             {

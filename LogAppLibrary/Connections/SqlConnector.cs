@@ -5,7 +5,7 @@ namespace LogAppLibrary
 {
     public class SqlConnector : IDataConnection
     {
-        public UserModel CreateUser(UserModel user_model)
+        public UserModel CreateUser(UserModel user_model) //for registering(creating user)
         {
             
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
@@ -26,7 +26,7 @@ namespace LogAppLibrary
             }
         }
 
-        public UserModel CurrentTime(UserModel user_model)
+        public UserModel CurrentTime(UserModel user_model) //log in, passing studentIdNumber that was on datetimetable and not colliding with other param
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -36,7 +36,7 @@ namespace LogAppLibrary
                 return user_model;
             }
         }
-        public PurposeModel CreatePurpose(UserModel user_model, PurposeModel purpose_model)
+        public PurposeModel CreatePurpose(UserModel user_model, PurposeModel purpose_model) // for borrowing item and returning
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -51,7 +51,7 @@ namespace LogAppLibrary
                 return purpose_model;
             }
         }
-        public UserModel CurrentTime(UserModel user_model, PurposeModel purposeModel)
+        public UserModel CurrentTime(UserModel user_model, PurposeModel purposeModel) //passing timeinout string with studentid to table
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -66,7 +66,7 @@ namespace LogAppLibrary
                 return user_model;
             }
         }
-        public ItemModel CreateItem(ItemModel item_model)
+        public ItemModel CreateItem(ItemModel item_model) //adding/creating item to item table
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -82,7 +82,7 @@ namespace LogAppLibrary
                 return item_model;
             }
         }
-        public ItemModel RemoveItem(ItemModel item_model)
+        public ItemModel RemoveItem(ItemModel item_model) //remove quantity of item
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -95,8 +95,20 @@ namespace LogAppLibrary
                 return item_model;
             }
         }
+        public ItemModel RemoveItemName(ItemModel item_model) //remove the whole column of passed itemmodel name
+        {
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ItemName", item_model.ItemName);
 
-        public bool IsStudentIdDuplicate(UserModel user_model)
+                dbConnection.Execute("dbo.spRemoveItemName", p, commandType: CommandType.StoredProcedure);
+
+                return item_model;
+            }
+        }
+
+        public bool IsStudentIdDuplicate(UserModel user_model) // when trying to register, yet already registered
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
@@ -109,7 +121,7 @@ namespace LogAppLibrary
                 return count > 0;
             }
         }
-        public bool IsNotRegistered(UserModel user_model)
+        public bool IsNotRegistered(UserModel user_model) //when entering id for log
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
