@@ -63,9 +63,9 @@ namespace LogAppForms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ID {
+        internal static System.Drawing.Bitmap Log_Monitoring {
             get {
-                object obj = ResourceManager.GetObject("ID", resourceCulture);
+                object obj = ResourceManager.GetObject("Log Monitoring", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
