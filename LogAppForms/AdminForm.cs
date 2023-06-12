@@ -356,6 +356,7 @@ namespace LogAppForms
 
         private void button2_Click(object sender, EventArgs e)
         {
+            listView2.Items.Clear();
             PopulateListView();
         }
         private void PopulateListView()

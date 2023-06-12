@@ -48,6 +48,9 @@ namespace LogAppForms
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.Inventory = new System.Windows.Forms.TabPage();
+            this.listView2 = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -56,9 +59,6 @@ namespace LogAppForms
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-            this.listView2 = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.Inventory.SuspendLayout();
@@ -216,6 +216,30 @@ namespace LogAppForms
             this.Inventory.Text = "Equipment Inventory";
             this.Inventory.UseVisualStyleBackColor = true;
             // 
+            // listView2
+            // 
+            this.listView2.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader8});
+            this.listView2.HideSelection = false;
+            this.listView2.Location = new System.Drawing.Point(13, 59);
+            this.listView2.Name = "listView2";
+            this.listView2.Size = new System.Drawing.Size(777, 391);
+            this.listView2.TabIndex = 7;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Item Name";
+            this.columnHeader5.Width = 125;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Quantity";
+            this.columnHeader8.Width = 125;
+            // 
             // button5
             // 
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -296,30 +320,6 @@ namespace LogAppForms
             this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
-            // 
-            // listView2
-            // 
-            this.listView2.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader8});
-            this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(13, 59);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(777, 391);
-            this.listView2.TabIndex = 7;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Item Name";
-            this.columnHeader5.Width = 125;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Quantity";
-            this.columnHeader8.Width = 125;
             // 
             // AdminForm
             // 
