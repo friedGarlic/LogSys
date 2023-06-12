@@ -91,12 +91,16 @@ namespace LogAppForms
                 Size = new Size(462, 420);
                 userControl11.Show();
                 userControl21.Hide();
+                userControl21.radioButton1.Checked = false;
+                userControl21.radioButton2.Checked = false;
             }
             if (radioButton2.Checked == true)
             {
                 Size = new Size(625, 420);
                 userControl11.Hide();
                 userControl21.Show();
+                userControl11.radioButton1.Checked = false;
+                userControl11.radioButton2.Checked = false;
             }
         }
 
@@ -107,31 +111,33 @@ namespace LogAppForms
                 Size = new Size(462, 420);
                 userControl11.Show();
                 userControl21.Hide();
+                userControl21.radioButton1.Checked = false;
+                userControl21.radioButton2.Checked = false;
             }
             if (radioButton2.Checked == true)
             {
                 Size = new Size(625, 420);
                 userControl11.Hide();
                 userControl21.Show();
+                userControl11.radioButton1.Checked = false;
+                userControl11.radioButton2.Checked = false;
             }
         }
         public bool ValidateForm()
         {
-            if(userControl21.numericUpDown1.Value == 0)
+            if (userControl11.radioButton1.Checked || userControl11.radioButton2.Checked)
+            {
+                return true;
+            }
+
+            if (userControl21.numericUpDown1.Value <= 0 || userControl21.comboBox1.Text.Length <= 0)
             {
                 return false;
             }
-            if (userControl21.comboBox1.Text.Length == 0)
+
+            if (userControl21.radioButton1.Checked || userControl21.radioButton2.Checked)
             {
-                return false;
-            }
-            if(!userControl21.radioButton1.Checked)
-            {
-                return false;
-            }
-            if(!userControl21.radioButton2.Checked)
-            {
-                return false;
+                return true;
             }
             return true;
         }
