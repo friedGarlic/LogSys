@@ -356,9 +356,9 @@ namespace LogAppForms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            PopulateDataGridView();
+            PopulateListView();
         }
-        private void PopulateDataGridView()
+        private void PopulateListView()
         {
             try
             {
@@ -371,23 +371,21 @@ namespace LogAppForms
                 _conn.Close();
                 dt = ds.Tables["dbo.Items"];
 
-                dataGridView1.Columns.Clear();
-                dataGridView1.Rows.Clear();
+                dataView = new DataView(dt);
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred on opening a connection saying: " + ex.Message);
             }
-            // add columns to the DataGridView
-            foreach (DataColumn column in dt.Columns)
-            {
-                dataGridView1.Columns.Add(column.ColumnName, column.ColumnName);
-            }
 
-            // add rows to the DataGridView
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow dr in dataView.ToTable().Rows)
             {
-                dataGridView1.Rows.Add(row.ItemArray);
+                listView2.Items.Add(new ListViewItem(new string[]
+                                    {
+                                        dr[1].ToString(),
+                                        dr[2].ToString()
+                                    })) ;
             }
         }
         private void button3_Click(object sender, EventArgs e)
