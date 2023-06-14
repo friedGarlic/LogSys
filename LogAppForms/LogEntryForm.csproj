@@ -203,9 +203,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ID.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\LogAppLibrary\LogAppLibrary.csproj">
       <Project>{47c00407-4d97-4ea5-95c9-adbbf352eded}</Project>
       <Name>LogAppLibrary</Name>
@@ -229,10 +226,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ccit.png" />
+    <None Include="Resources\2721273.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Log Monitoring.png" />
+    <None Include="Resources\27212731.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Untitled design.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

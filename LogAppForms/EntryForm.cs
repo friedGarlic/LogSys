@@ -1,5 +1,6 @@
 ﻿using LogAppLibrary;
 using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -7,6 +8,9 @@ namespace LogAppForms
 {
     public partial class EntryForm : Form
     {
+        bool drag = false;
+        Point start_point = new Point(0, 0);
+        
         public EntryForm()
         {
             InitializeComponent();
@@ -79,5 +83,31 @@ namespace LogAppForms
                 button1_Click(sender, e);
             }
         }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            drag = true;
+            start_point = new Point(e.X, e.Y);
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(drag)
+            {
+                Point p = PointToScreen(e.Location);
+                this.Location = new Point(p.X - start_point.X, p.Y - start_point.Y); ;
+            }
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            drag = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
