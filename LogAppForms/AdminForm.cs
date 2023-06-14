@@ -7,7 +7,9 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Timers;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace LogAppForms
 {
@@ -119,34 +121,48 @@ namespace LogAppForms
                 printDocument.Print();
             }
         }
-        void Print()
-        {
-            /*
-            PrintDocument PrintDocument = new PrintDocument();
-            PrintDocument.PrintPage += (object sender, PrintPageEventArgs e) =>
-            {
-                Font font = new Font("Arial", 12);
-                float locY = 150.0f;
-                float startLocLeft = e.MarginBounds.Left;
-                float startLocRight = e.MarginBounds.Right;
-                foreach (DataRow dataRow in dt.Rows)
-                {
-                    foreach (DataRow dr2 in dataView2.ToTable().Rows)
-                    {
-                        locY += 20.0f;   
-                        PointF locationX = new System.Drawing.PointF(startLocLeft, 150);
-                        PointF locationY = new System.Drawing.PointF(e.MarginBounds.Right, 150);
-                        e.Graphics.DrawLine(Pens.Black, locationX, locationY);
-                        e.Graphics.DrawString(dataRow[1].ToString(), font, Brushes.Black, startLocLeft, locY);
-                    }
-                }
-            };
-            PrintDocument.Print();
-            */
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            foreach (var series in chart1.Series)
+            {
+                series.Points.Clear();
+            }
+            if (textBox1.TextLength == 0)
+            {
+                using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+                {
+                    connection.Open();
+
+                    string sqlQuery = "SELECT DISTINCT StudentIdNumber FROM DateTimeTable";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string studentId = reader.GetString(0); // Assuming StudentIdNumber is of type VARCHAR
+
+                                UserModel model = new UserModel(studentId);
+                                TimeSpan totalDuration = GetTotalDuration(model);
+
+                                chart1.Series["Hours"].Points.AddXY(studentId, totalDuration.Minutes);
+                            }
+                        }
+                    }
+
+                    connection.Close();
+                }
+            }
+            else
+            {
+                UserModel model = new UserModel(textBox1.Text);
+                TimeSpan totalDuration = GetTotalDuration(model);
+
+                chart1.Series["Hours"].Points.AddXY(textBox1.Text, totalDuration.Minutes);
+            }
+            
+
             _conn.Open();
             cmd = new SqlCommand("SELECT * FROM Students", _conn);
             cmd2 = new SqlCommand("SELECT * FROM DateTimeTable", _conn);
@@ -394,5 +410,81 @@ namespace LogAppForms
             AddItem addItem = new AddItem();
             addItem.Show();
         }
+        public UserModel GetTimeDate(UserModel userModel)
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT CurDateTime FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentIdNumber", userModel.student_ID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime dateTimeValue = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
+                            Console.WriteLine(dateTimeValue);
+                        }
+                    }
+                }
+
+                connection.Close();
+
+                return userModel;
+            }
+        }
+
+        public TimeSpan GetTotalDuration(UserModel userModel)
+        {
+            TimeSpan totalDuration = TimeSpan.Zero;
+            DateTime? previousDateTime = null;
+            bool isInsideTimeRange = false;
+
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT CurDateTime, TimeInOut FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber ORDER BY CurDateTime";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentIdNumber", userModel.student_ID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime currentDateTime = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
+                            string eventType = reader.GetString(1); // Assuming TimeInOut is of type VARCHAR
+
+                            if (eventType == "Time In")
+                            {
+                                if (!isInsideTimeRange)
+                                {
+                                    previousDateTime = currentDateTime;
+                                    isInsideTimeRange = true;
+                                }
+                            }
+                            else if (eventType == "Time Out")
+                            {
+                                if (isInsideTimeRange && previousDateTime.HasValue)
+                                {
+                                    TimeSpan duration = currentDateTime - previousDateTime.Value;
+                                    totalDuration += duration;
+                                    isInsideTimeRange = false;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+
+            Console.WriteLine(totalDuration);
+            return totalDuration;
+        }
+
     }
 }

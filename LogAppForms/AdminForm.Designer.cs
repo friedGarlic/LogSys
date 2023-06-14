@@ -30,9 +30,15 @@ namespace LogAppForms
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button4 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -61,6 +67,7 @@ namespace LogAppForms
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.Inventory.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,11 +78,13 @@ namespace LogAppForms
             this.tabControl1.Location = new System.Drawing.Point(0, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(804, 482);
+            this.tabControl1.Size = new System.Drawing.Size(1259, 593);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chart1);
+            this.tabPage1.Controls.Add(this.progressBar1);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.listView1);
@@ -85,14 +94,41 @@ namespace LogAppForms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(796, 456);
+            this.tabPage1.Size = new System.Drawing.Size(1251, 567);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Entry History";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chart1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(796, 88);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Hours";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(450, 463);
+            this.chart1.TabIndex = 6;
+            this.chart1.Text = "chart1";
+            title1.Name = "Title1";
+            title1.Text = "Number of Hours";
+            this.chart1.Titles.Add(title1);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(811, 50);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(434, 32);
+            this.progressBar1.TabIndex = 1;
+            this.progressBar1.Value = 50;
+            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(8, 421);
+            this.button4.Location = new System.Drawing.Point(8, 538);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(127, 23);
             this.button4.TabIndex = 1;
@@ -125,7 +161,7 @@ namespace LogAppForms
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(8, 50);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(782, 365);
+            this.listView1.Size = new System.Drawing.Size(782, 482);
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -211,7 +247,7 @@ namespace LogAppForms
             this.Inventory.Location = new System.Drawing.Point(4, 22);
             this.Inventory.Name = "Inventory";
             this.Inventory.Padding = new System.Windows.Forms.Padding(3);
-            this.Inventory.Size = new System.Drawing.Size(796, 456);
+            this.Inventory.Size = new System.Drawing.Size(1251, 567);
             this.Inventory.TabIndex = 1;
             this.Inventory.Text = "Equipment Inventory";
             this.Inventory.UseVisualStyleBackColor = true;
@@ -325,13 +361,14 @@ namespace LogAppForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(811, 489);
+            this.ClientSize = new System.Drawing.Size(1271, 609);
             this.Controls.Add(this.tabControl1);
             this.Name = "AdminForm";
             this.Text = "Admin Form";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.Inventory.ResumeLayout(false);
             this.Inventory.PerformLayout();
             this.ResumeLayout(false);
@@ -368,5 +405,7 @@ namespace LogAppForms
         private ListView listView2;
         private ColumnHeader columnHeader5;
         private ColumnHeader columnHeader8;
+        private ProgressBar progressBar1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }

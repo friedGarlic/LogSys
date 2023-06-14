@@ -1,5 +1,7 @@
 ﻿using Dapper;
+using System;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace LogAppLibrary
 {
@@ -148,6 +150,25 @@ namespace LogAppLibrary
                 int count = dbConnection.ExecuteScalar<int>(query, p);
 
                 return count > 0;
+            }
+        }
+
+        public void GetDuration()
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT CurDateTime FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+
+                    DateTime dateTimeValue = (DateTime)command.ExecuteScalar();
+
+                    Console.WriteLine("DateTime Value: " + dateTimeValue);
+                }
+
+                connection.Close();
             }
         }
     }
