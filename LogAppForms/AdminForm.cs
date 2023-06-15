@@ -244,7 +244,7 @@ namespace LogAppForms
                             UserModel model = new UserModel(studentId);
                             TimeSpan totalDuration = GetTotalDuration(model);
 
-                            chart1.Series["Hours"].Points.AddXY(studentId, totalDuration.Minutes);
+                            chart1.Series["Minutes"].Points.AddXY(studentId, totalDuration.Minutes);
                         }
                     }
                 }
@@ -550,6 +550,7 @@ namespace LogAppForms
             AddItem addItem = new AddItem();
             addItem.Show();
         }
+
         public UserModel GetTimeDate(UserModel userModel)
         {
             using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
@@ -575,7 +576,6 @@ namespace LogAppForms
                 return userModel;
             }
         }
-
         public TimeSpan GetTotalDuration(UserModel userModel)
         {
             TimeSpan totalDuration = TimeSpan.Zero;

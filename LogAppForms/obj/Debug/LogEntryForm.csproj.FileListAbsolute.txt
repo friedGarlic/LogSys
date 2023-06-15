@@ -80,3 +80,5 @@ C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp-gdi.xml
 C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp.Charting-gdi.xml
 C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\de\PdfSharp-gdi.resources.dll
 C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\de\PdfSharp.Charting-gdi.resources.dll
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\ToggleSwitch.dll
+C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.Toggle_Switch.resources

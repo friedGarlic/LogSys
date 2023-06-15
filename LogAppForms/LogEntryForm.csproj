@@ -89,6 +89,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ToggleSwitch, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToggleSwitch.1.2.0\lib\net46\ToggleSwitch.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddItem.cs">
@@ -140,6 +143,12 @@
     <Compile Include="RemoveItem.Designer.cs">
       <DependentUpon>RemoveItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Toggle Switch.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Toggle Switch.Designer.cs">
+      <DependentUpon>Toggle Switch.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -183,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RemoveItem.resx">
       <DependentUpon>RemoveItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Toggle Switch.resx">
+      <DependentUpon>Toggle Switch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>

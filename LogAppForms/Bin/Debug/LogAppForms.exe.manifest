@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="753112">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="756696">
       <assemblyIdentity name="LogAppForms" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>R6d5up0CwSbRpEiQwpNlvn71VZM4lrrUSjRPHMoZROo=</dsig:DigestValue>
+        <dsig:DigestValue>7yjJLovfdoDUq27KP/RbF6uyetbw3257dEnpXwzG1t0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -122,6 +122,18 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>UwNcbr+NAwuf71CvnaxFcfhxQTnxZxNf4Xj087i50cs=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ToggleSwitch.dll" size="44544">
+      <assemblyIdentity name="ToggleSwitch" version="1.2.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>RPrGCyp2bx7aVStoPWu2Sbean7yck4BgZxWmh3Q99vE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

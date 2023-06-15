@@ -49,7 +49,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(60, 263);
+            this.button1.Location = new System.Drawing.Point(61, 298);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 36);
             this.button1.TabIndex = 3;
@@ -61,7 +61,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(41, 136);
+            this.radioButton1.Location = new System.Drawing.Point(41, 169);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(154, 24);
             this.radioButton1.TabIndex = 4;
@@ -74,7 +74,7 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(41, 183);
+            this.radioButton2.Location = new System.Drawing.Point(41, 228);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(165, 24);
             this.radioButton2.TabIndex = 5;
