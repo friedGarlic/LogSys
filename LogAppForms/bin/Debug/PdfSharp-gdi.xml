@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>PdfSharp</name>
+        <name>PdfSharp-gdi</name>
     </assembly>
     <members>
         <member name="T:PdfSharp.Config">
@@ -25,9 +25,19 @@
             Value of 2% found in original XPS 1.0 documentation.
             </summary>
         </member>
-        <member name="T:PdfSharp.Internal.Lock">
+        <member name="T:PdfSharp.Internal.Calc">
             <summary>
-            Static locking functions to make PDFsharp thread save.
+            Some static helper functions for calculations.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Internal.Calc.Deg2Rad">
+            <summary>
+            Degree to radiant factor.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Internal.Calc.PageSizeToSize(PdfSharp.PageSize)">
+            <summary>
+            Get page size in point from specified PageSize.
             </summary>
         </member>
         <member name="T:PdfSharp.Internal.Diagnostics">
@@ -76,21 +86,6 @@
         <member name="M:PdfSharp.Internal.FontsDevHelper.GetFontCachesState">
             <summary>
             Dumps the font caches to a string.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Internal.Calc">
-            <summary>
-            Some static helper functions for calculations.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Internal.Calc.Deg2Rad">
-            <summary>
-            Degree to radiant factor.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Internal.Calc.PageSizeToSize(PdfSharp.PageSize)">
-            <summary>
-            Get page size in point from specified PageSize.
             </summary>
         </member>
         <member name="T:PdfSharp.Internal.DoubleUtil">
@@ -176,6 +171,11 @@
         <member name="M:PdfSharp.Internal.DoubleUtil.DoubleToInt(System.Double)">
             <summary>
             Converts a double to integer.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Internal.Lock">
+            <summary>
+            Static locking functions to make PDFsharp thread save.
             </summary>
         </member>
         <member name="T:PdfSharp.Internal.NativeMethods">
@@ -863,6 +863,300 @@
             <param name="info"></param>
             <param name="isThick">Determines whether a thick line's with shall be returned.</param>
         </member>
+        <member name="T:PdfSharp.Drawing.IImageImporter">
+            <summary>
+            This interface will be implemented by specialized classes, one for JPEG, one for BMP, one for PNG, one for GIF. Maybe more.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.IImageImporter.ImportImage(PdfSharp.Drawing.StreamReaderHelper,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Imports the image. Returns null if the image importer does not support the format.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.IImageImporter.PrepareImage(PdfSharp.Drawing.ImagePrivateData)">
+            <summary>
+            Prepares the image data needed for the PDF file.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.StreamReaderHelper">
+            <summary>
+            Helper for dealing with Stream data.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.StreamReaderHelper.Reset">
+            <summary>
+            Resets this instance.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.StreamReaderHelper.OriginalStream">
+            <summary>
+            Gets the original stream.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.StreamReaderHelper.Data">
+            <summary>
+            Gets the data as byte[].
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.StreamReaderHelper.Length">
+            <summary>
+            Gets the length of Data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.StreamReaderHelper.OwnedMemoryStream">
+            <summary>
+            Gets the owned memory stream. Can be null if no MemoryStream was created.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.ImportedImage">
+            <summary>
+            The imported image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.ImportedImage.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.ImagePrivateData,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.ImportedImage"/> class.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.ImportedImage.Information">
+            <summary>
+            Gets information about the image.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.ImportedImage.HasImageData">
+            <summary>
+            Gets a value indicating whether image data for the PDF file was already prepared.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.ImportedImage.ImageData">
+            <summary>
+            Gets the image data needed for the PDF file.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.ImageInformation">
+            <summary>
+            Public information about the image, filled immediately.
+            Note: The stream will be read and decoded on the first call to PrepareImageData().
+            ImageInformation can be filled for corrupted images that will throw an expection on PrepareImageData().
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEG">
+            <summary>
+            Standard JPEG format (RGB).
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGGRAY">
+            <summary>
+            Grayscale JPEG format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGRGBW">
+            <summary>
+            JPEG file with inverted CMYK, thus RGBW.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGCMYK">
+            <summary>
+            JPEG file with CMYK.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalDPI">
+            <summary>
+            The horizontal DPI (dots per inch). Can be 0 if not supported by the image format.
+            Note: JFIF (JPEG) files may contain either DPI or DPM or just the aspect ratio. Windows BMP files will contain DPM. Other formats may support any combination, including none at all.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalDPI">
+            <summary>
+            The vertical DPI (dots per inch). Can be 0 if not supported by the image format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalDPM">
+            <summary>
+            The horizontal DPM (dots per meter). Can be 0 if not supported by the image format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalDPM">
+            <summary>
+            The vertical DPM (dots per meter). Can be 0 if not supported by the image format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalAspectRatio">
+            <summary>
+            The horizontal component of the aspect ratio. Can be 0 if not supported by the image format.
+            Note: Aspect ratio will be set if either DPI or DPM was set, but may also be available in the absence of both DPI and DPM.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalAspectRatio">
+            <summary>
+            The vertical component of the aspect ratio. Can be 0 if not supported by the image format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.ImageInformation.ColorsUsed">
+            <summary>
+            The colors used. Only valid for images with palettes, will be 0 otherwise.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.ImagePrivateData">
+            <summary>
+            Contains internal data. This includes a reference to the Stream if data for PDF was not yet prepared.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.ImagePrivateData.Image">
+            <summary>
+            Gets the image.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.ImageData">
+            <summary>
+            Contains data needed for PDF. Will be prepared when needed.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImageImporter">
+            <summary>
+            The class that imports images of various formats.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.GetImageImporter">
+            <summary>
+            Gets the image importer.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.ImportImage(System.IO.Stream,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Imports the image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.ImportImage(System.String,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Imports the image.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImportedImageBitmap">
+            <summary>
+            Bitmap refers to the format used in PDF. Will be used for BMP, PNG, TIFF, GIF and others.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImportedImageBitmap.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.Internal.ImagePrivateDataBitmap,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImportedImageBitmap"/> class.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImageDataBitmap">
+            <summary>
+            Contains data needed for PDF. Will be prepared when needed.
+            Bitmap refers to the format used in PDF. Will be used for BMP, PNG, TIFF, GIF and others.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.Data">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.Length">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.DataFax">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.LengthFax">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap">
+            <summary>
+            Image data needed for PDF bitmap images.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.#ctor(System.Byte[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap"/> class.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Data">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Length">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.FlippedImage">
+            <summary>
+            True if first line is the top line, false if first line is the bottom line of the image. When needed, lines will be reversed while converting data into PDF format.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Offset">
+            <summary>
+            The offset of the image data in Data.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.ColorPaletteOffset">
+            <summary>
+            The offset of the color palette in Data.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.CopyTrueColorMemoryBitmap(System.Int32,System.Int32,System.Boolean,PdfSharp.Drawing.Internal.ImageDataBitmap)">
+            <summary>
+            Copies images without color palette.
+            </summary>
+            <param name="components">4 (32bpp RGB), 3 (24bpp RGB, 32bpp ARGB)</param>
+            <param name="bits">8</param>
+            <param name="hasAlpha">true (ARGB), false (RGB)</param>
+            <param name="dest">Destination </param>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImportedImageJpeg">
+            <summary>
+            Imported JPEG image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImportedImageJpeg.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.Internal.ImagePrivateDataDct,PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImportedImageJpeg"/> class.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImageDataDct">
+            <summary>
+            Contains data needed for PDF. Will be prepared when needed.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataDct.Data">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImageDataDct.Length">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.Internal.ImagePrivateDataDct">
+            <summary>
+            Private data for JPEG images.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataDct.#ctor(System.Byte[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImagePrivateDataDct"/> class.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataDct.Data">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataDct.Length">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.Layout.XParagraphAlignment">
             <summary>
             Specifies the alignment of a paragraph.
@@ -1115,7 +1409,7 @@
             Appends a Bézier curve for a cardinal spline through pt1 and pt2.
             </summary>
         </member>
-        <member name="M:PdfSharp.Drawing.Pdf.XGraphicsPdfRenderer.AppendPath(PdfSharp.Drawing.CoreGraphicsPath)">
+        <member name="M:PdfSharp.Drawing.Pdf.XGraphicsPdfRenderer.AppendPath(System.Drawing.Drawing2D.GraphicsPath)">
             <summary>
             Appends the content of a GraphicsPath object.
             </summary>
@@ -1289,46 +1583,6 @@
         <member name="P:PdfSharp.Drawing.CoreGraphicsPath.PathTypes">
             <summary>
             Gets the path types in GDI+ style.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.XSweepDirection">
-            <summary>
-            Defines the direction an elliptical arc is drawn.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XSweepDirection.Counterclockwise">
-            <summary>
-            Specifies that arcs are drawn in a counter clockwise (negative-angle) direction.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XSweepDirection.Clockwise">
-            <summary>
-            Specifies that arcs are drawn in a clockwise (positive-angle) direction.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.XStyleSimulations">
-            <summary>
-            Describes the simulation style of a font.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XStyleSimulations.None">
-            <summary>
-            No font style simulation.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XStyleSimulations.BoldSimulation">
-            <summary>
-            Bold style simulation.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XStyleSimulations.ItalicSimulation">
-            <summary>
-            Italic style simulation.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.XStyleSimulations.BoldItalicSimulation">
-            <summary>
-            Bold and Italic style simulation.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.PathStart">
@@ -2223,6 +2477,66 @@
             position is left. 
             </summary>
         </member>
+        <member name="T:PdfSharp.Drawing.XStyleSimulations">
+            <summary>
+            Describes the simulation style of a font.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XStyleSimulations.None">
+            <summary>
+            No font style simulation.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XStyleSimulations.BoldSimulation">
+            <summary>
+            Bold style simulation.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XStyleSimulations.ItalicSimulation">
+            <summary>
+            Italic style simulation.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XStyleSimulations.BoldItalicSimulation">
+            <summary>
+            Bold and Italic style simulation.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.XSweepDirection">
+            <summary>
+            Defines the direction an elliptical arc is drawn.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XSweepDirection.Counterclockwise">
+            <summary>
+            Specifies that arcs are drawn in a counter clockwise (negative-angle) direction.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XSweepDirection.Clockwise">
+            <summary>
+            Specifies that arcs are drawn in a clockwise (positive-angle) direction.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Drawing.FontFamilyCache">
+            <summary>
+            Global cache of all internal font family objects.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.FontFamilyCache.CacheOrGetFontFamily(PdfSharp.Drawing.FontFamilyInternal)">
+            <summary>
+            Caches the font family or returns a previously cached one.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.FontFamilyCache.Singleton">
+            <summary>
+            Gets the singleton.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.FontFamilyCache._familiesByName">
+            <summary>
+            Maps family name to internal font family.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.FontFamilyInternal">
             <summary>
             Internal implementation class of XFontFamily.
@@ -2320,295 +2634,6 @@
         <member name="M:PdfSharp.Drawing.InternalGraphicsState.Popped">
             <summary>
             Called after this instanced was popped from the internal graphics stack.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.IImageImporter">
-            <summary>
-            This interface will be implemented by specialized classes, one for JPEG, one for BMP, one for PNG, one for GIF. Maybe more.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.IImageImporter.ImportImage(PdfSharp.Drawing.StreamReaderHelper,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Imports the image. Returns null if the image importer does not support the format.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.IImageImporter.PrepareImage(PdfSharp.Drawing.ImagePrivateData)">
-            <summary>
-            Prepares the image data needed for the PDF file.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.StreamReaderHelper">
-            <summary>
-            Helper for dealing with Stream data.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.StreamReaderHelper.Reset">
-            <summary>
-            Resets this instance.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.StreamReaderHelper.OriginalStream">
-            <summary>
-            Gets the original stream.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.StreamReaderHelper.Data">
-            <summary>
-            Gets the data as byte[].
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.StreamReaderHelper.Length">
-            <summary>
-            Gets the length of Data.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.ImportedImage">
-            <summary>
-            The imported image.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.ImportedImage.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.ImagePrivateData,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.ImportedImage"/> class.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.ImportedImage.Information">
-            <summary>
-            Gets information about the image.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.ImportedImage.HasImageData">
-            <summary>
-            Gets a value indicating whether image data for the PDF file was already prepared.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.ImportedImage.ImageData">
-            <summary>
-            Gets the image data needed for the PDF file.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.ImageInformation">
-            <summary>
-            Public information about the image, filled immediately.
-            Note: The stream will be read and decoded on the first call to PrepareImageData().
-            ImageInformation can be filled for corrupted images that will throw an expection on PrepareImageData().
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEG">
-            <summary>
-            Standard JPEG format (RGB).
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGGRAY">
-            <summary>
-            Grayscale JPEG format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGRGBW">
-            <summary>
-            JPEG file with inverted CMYK, thus RGBW.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.ImageFormats.JPEGCMYK">
-            <summary>
-            JPEG file with CMYK.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalDPI">
-            <summary>
-            The horizontal DPI (dots per inch). Can be 0 if not supported by the image format.
-            Note: JFIF (JPEG) files may contain either DPI or DPM or just the aspect ratio. Windows BMP files will contain DPM. Other formats may support any combination, including none at all.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalDPI">
-            <summary>
-            The vertical DPI (dots per inch). Can be 0 if not supported by the image format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalDPM">
-            <summary>
-            The horizontal DPM (dots per meter). Can be 0 if not supported by the image format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalDPM">
-            <summary>
-            The vertical DPM (dots per meter). Can be 0 if not supported by the image format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.HorizontalAspectRatio">
-            <summary>
-            The horizontal component of the aspect ratio. Can be 0 if not supported by the image format.
-            Note: Aspect ratio will be set if either DPI or DPM was set, but may also be available in the absence of both DPI and DPM.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.VerticalAspectRatio">
-            <summary>
-            The vertical component of the aspect ratio. Can be 0 if not supported by the image format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.ImageInformation.ColorsUsed">
-            <summary>
-            The colors used. Only valid for images with palettes, will be 0 otherwise.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.ImagePrivateData">
-            <summary>
-            Contains internal data. This includes a reference to the Stream if data for PDF was not yet prepared.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.ImagePrivateData.Image">
-            <summary>
-            Gets the image.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.ImageData">
-            <summary>
-            Contains data needed for PDF. Will be prepared when needed.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImportedImageBitmap">
-            <summary>
-            Bitmap refers to the format used in PDF. Will be used for BMP, PNG, TIFF, GIF and others.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImportedImageBitmap.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.Internal.ImagePrivateDataBitmap,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImportedImageBitmap"/> class.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImageDataBitmap">
-            <summary>
-            Contains data needed for PDF. Will be prepared when needed.
-            Bitmap refers to the format used in PDF. Will be used for BMP, PNG, TIFF, GIF and others.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.Data">
-            <summary>
-            Gets the data.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.Length">
-            <summary>
-            Gets the length.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.DataFax">
-            <summary>
-            Gets the data.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataBitmap.LengthFax">
-            <summary>
-            Gets the length.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap">
-            <summary>
-            Image data needed for PDF bitmap images.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.#ctor(System.Byte[],System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap"/> class.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Data">
-            <summary>
-            Gets the data.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Length">
-            <summary>
-            Gets the length.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.FlippedImage">
-            <summary>
-            True if first line is the top line, false if first line is the bottom line of the image. When needed, lines will be reversed while converting data into PDF format.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.Offset">
-            <summary>
-            The offset of the image data in Data.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.ColorPaletteOffset">
-            <summary>
-            The offset of the color palette in Data.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataBitmap.CopyTrueColorMemoryBitmap(System.Int32,System.Int32,System.Boolean,PdfSharp.Drawing.Internal.ImageDataBitmap)">
-            <summary>
-            Copies images without color palette.
-            </summary>
-            <param name="components">4 (32bpp RGB), 3 (24bpp RGB, 32bpp ARGB)</param>
-            <param name="bits">8</param>
-            <param name="hasAlpha">true (ARGB), false (RGB)</param>
-            <param name="dest">Destination </param>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImportedImageJpeg">
-            <summary>
-            Imported JPEG image.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImportedImageJpeg.#ctor(PdfSharp.Drawing.IImageImporter,PdfSharp.Drawing.Internal.ImagePrivateDataDct,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImportedImageJpeg"/> class.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImageDataDct">
-            <summary>
-            Contains data needed for PDF. Will be prepared when needed.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataDct.Data">
-            <summary>
-            Gets the data.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImageDataDct.Length">
-            <summary>
-            Gets the length.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImagePrivateDataDct">
-            <summary>
-            Private data for JPEG images.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImagePrivateDataDct.#ctor(System.Byte[],System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.Internal.ImagePrivateDataDct"/> class.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataDct.Data">
-            <summary>
-            Gets the data.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.Internal.ImagePrivateDataDct.Length">
-            <summary>
-            Gets the length.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.Internal.ImageImporter">
-            <summary>
-            The class that imports images of various formats.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.GetImageImporter">
-            <summary>
-            Gets the image importer.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.ImportImage(System.IO.Stream,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Imports the image.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.Internal.ImageImporter.ImportImage(System.String,PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Imports the image.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.IXGraphicsRenderer">
@@ -2817,10 +2842,30 @@
             Creates a default 24 bit ARGB bitmap with the specified pixel size.
             </summary>
         </member>
+        <member name="T:PdfSharp.Drawing.XBitmapSource">
+            <summary>
+            Defines an abstract base class for pixel based images.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XBitmapSource.PixelWidth">
+            <summary>
+            Gets the width of the image in pixels.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XBitmapSource.PixelHeight">
+            <summary>
+            Gets the height of the image in pixels.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.XBrush">
             <summary>
             Classes derived from this abstract base class define objects used to fill the 
             interiors of paths.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XBrush.op_Implicit(System.Drawing.Brush)~PdfSharp.Drawing.XBrush">
+            <summary>
+            Converts from a System.Drawing.Brush.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.XBrushes">
@@ -3277,7 +3322,17 @@
             Creates an XColor structure from the four ARGB component (alpha, red, green, and blue) values.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XColor.FromArgb(System.Drawing.Color)">
+            <summary>
+            Creates an XColor structure from the specified System.Drawing.Color.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XColor.FromArgb(System.Int32,PdfSharp.Drawing.XColor)">
+            <summary>
+            Creates an XColor structure from the specified alpha value and color.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XColor.FromArgb(System.Int32,System.Drawing.Color)">
             <summary>
             Creates an XColor structure from the specified alpha value and color.
             </summary>
@@ -3302,6 +3357,11 @@
             Creates an XColor from the specified pre-defined color.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XColor.FromKnownColor(System.Drawing.KnownColor)">
+            <summary>
+            Creates an XColor from the specified pre-defined color.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XColor.FromName(System.String)">
             <summary>
             Creates an XColor from the specified name of a pre-defined color.
@@ -3316,6 +3376,16 @@
             <summary>
             Indicates whether this XColor structure is uninitialized.
             </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XColor.op_Implicit(System.Drawing.Color)~PdfSharp.Drawing.XColor">
+            <summary>
+            Implicit conversion from Color to XColor
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XColor.ToGdiColor">
+            <summary>
+             Creates a System.Drawing.Color object from this color.
+             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XColor.Equals(System.Object)">
             <summary>
@@ -3913,6 +3983,16 @@
             Converts XGraphics enums to GDI+ enums.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XConvert.ToLineJoin(PdfSharp.Drawing.XLineJoin)">
+            <summary>
+            Converts XLineJoin to LineJoin.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XConvert.ToLineCap(PdfSharp.Drawing.XLineCap)">
+            <summary>
+            Converts XLineCap to LineCap.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.XFont">
             <summary>
             Defines an object used to draw text.
@@ -4124,26 +4204,6 @@
             Gets the DebuggerDisplayAttribute text.
             </summary>
         </member>
-        <member name="T:PdfSharp.Drawing.FontFamilyCache">
-            <summary>
-            Global cache of all internal font family objects.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.FontFamilyCache.CacheOrGetFontFamily(PdfSharp.Drawing.FontFamilyInternal)">
-            <summary>
-            Caches the font family or returns a previously cached one.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.FontFamilyCache.Singleton">
-            <summary>
-            Gets the singleton.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Drawing.FontFamilyCache._familiesByName">
-            <summary>
-            Maps family name to internal font family.
-            </summary>
-        </member>
         <member name="T:PdfSharp.Drawing.XFontFamily">
             <summary>
             Defines a group of typefaces having a similar basic design and certain variations in styles.
@@ -4206,6 +4266,12 @@
             <summary>
             Returns an array that contains all the FontFamily objects available for the specified 
             graphics context.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontFamily.GdiFamily">
+            <summary>
+            Gets the underlying GDI+ font family object.
+            Is null if the font was created by a font resolver.
             </summary>
         </member>
         <member name="F:PdfSharp.Drawing.XFontFamily.FamilyInternal">
@@ -4298,6 +4364,42 @@
             Gets the strikethrough thicksness.
             </summary>
         </member>
+        <member name="T:PdfSharp.Drawing.XFontSource">
+            <summary>
+            The bytes of a font file.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XFontSource.GetOrCreateFrom(System.Byte[])">
+            <summary>
+            Gets an existing font source or creates a new one.
+            A new font source is cached in font factory.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontSource.Fontface">
+            <summary>
+            Gets or sets the fontface.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontSource.Key">
+            <summary>
+            Gets the key that uniquely identifies this font source.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontSource.FontName">
+            <summary>
+            Gets the name of the font's name table.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontSource.Bytes">
+            <summary>
+            Gets the bytes of the font.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XFontSource.DebuggerDisplay">
+            <summary>
+            Gets the DebuggerDisplayAttribute text.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.XForm">
             <summary>
             Represents a graphical object that can be used to render retained graphics on it.
@@ -4328,6 +4430,23 @@
             <summary>
             Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XForm"/> class.
             </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XForm.#ctor(PdfSharp.Drawing.XGraphics,PdfSharp.Drawing.XSize)">
+            <summary>
+            Initializes a new instance of the XForm class such that it can be drawn on the specified graphics
+            object.
+            </summary>
+            <param name="gfx">The graphics object that later is used to draw this form.</param>
+            <param name="size">The size in points of the form.</param>
+        </member>
+        <member name="M:PdfSharp.Drawing.XForm.#ctor(PdfSharp.Drawing.XGraphics,PdfSharp.Drawing.XUnit,PdfSharp.Drawing.XUnit)">
+            <summary>
+            Initializes a new instance of the XForm class such that it can be drawn on the specified graphics
+            object.
+            </summary>
+            <param name="gfx">The graphics object that later is used to draw this form.</param>
+            <param name="width">The width of the form.</param>
+            <param name="height">The height of the form.</param>
         </member>
         <member name="M:PdfSharp.Drawing.XForm.#ctor(PdfSharp.Pdf.PdfDocument,PdfSharp.Drawing.XRect)">
             <summary>
@@ -4497,45 +4616,14 @@
             of an XPdfForm must not change objects that are already been drawn.
             </summary>
         </member>
-        <member name="T:PdfSharp.Drawing.XFontSource">
-            <summary>
-            The bytes of a font file.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Drawing.XFontSource.GetOrCreateFrom(System.Byte[])">
-            <summary>
-            Gets an existing font source or creates a new one.
-            A new font source is cached in font factory.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XFontSource.Fontface">
-            <summary>
-            Gets or sets the fontface.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XFontSource.Key">
-            <summary>
-            Gets the key that uniquely identifies this font source.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XFontSource.FontName">
-            <summary>
-            Gets the name of the font's name table.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XFontSource.Bytes">
-            <summary>
-            Gets the bytes of the font.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XFontSource.DebuggerDisplay">
-            <summary>
-            Gets the DebuggerDisplayAttribute text.
-            </summary>
-        </member>
         <member name="T:PdfSharp.Drawing.XGlyphTypeface">
             <summary>
             Specifies a physical font face that corresponds to a font file on the disk or in memory.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGlyphTypeface.#ctor(PdfSharp.Drawing.XFontSource)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XGlyphTypeface"/> class by a font source.
             </summary>
         </member>
         <member name="P:PdfSharp.Drawing.XGlyphTypeface.FaceName">
@@ -4601,6 +4689,15 @@
             Represents a drawing surface for a fixed size page.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.#ctor(System.Drawing.Graphics,PdfSharp.Drawing.XSize,PdfSharp.Drawing.XGraphicsUnit,PdfSharp.Drawing.XPageDirection)">
+            <summary>
+            Initializes a new instance of the XGraphics class.
+            </summary>
+            <param name="gfx">The gfx.</param>
+            <param name="size">The size.</param>
+            <param name="pageUnit">The page unit.</param>
+            <param name="pageDirection">The page direction.</param>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.#ctor(PdfSharp.Pdf.PdfPage,PdfSharp.Drawing.XGraphicsPdfPageOptions,PdfSharp.Drawing.XGraphicsUnit,PdfSharp.Drawing.XPageDirection)">
             <summary>
             Initializes a new instance of the XGraphics class for drawing on a PDF page.
@@ -4615,6 +4712,16 @@
             <summary>
             Creates the measure context. This is a graphics context created only for querying measures of text.
             Drawing on a measure context has no effect.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.FromGraphics(System.Drawing.Graphics,PdfSharp.Drawing.XSize)">
+            <summary>
+            Creates a new instance of the XGraphics class from a System.Drawing.Graphics object.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.FromGraphics(System.Drawing.Graphics,PdfSharp.Drawing.XSize,PdfSharp.Drawing.XGraphicsUnit)">
+            <summary>
+            Creates a new instance of the XGraphics class from a System.Drawing.Graphics object.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.FromPdfPage(PdfSharp.Pdf.PdfPage)">
@@ -4714,6 +4821,16 @@
             Gets the current size of the page.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawLine(PdfSharp.Drawing.XPen,System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            Draws a line connecting two Point structures.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawLine(PdfSharp.Drawing.XPen,System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Draws a line connecting two GdiPointF structures.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawLine(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
             <summary>
             Draws a line connecting two XPoint structures.
@@ -4722,6 +4839,16 @@
         <member name="M:PdfSharp.Drawing.XGraphics.DrawLine(PdfSharp.Drawing.XPen,System.Double,System.Double,System.Double,System.Double)">
             <summary>
             Draws a line connecting the two points specified by coordinate pairs.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawLines(PdfSharp.Drawing.XPen,System.Drawing.Point[])">
+            <summary>
+            Draws a series of line segments that connect an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawLines(PdfSharp.Drawing.XPen,System.Drawing.PointF[])">
+            <summary>
+            Draws a series of line segments that connect an array of points.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawLines(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[])">
@@ -4734,6 +4861,16 @@
             Draws a series of line segments that connect an array of x and y pairs.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawBezier(PdfSharp.Drawing.XPen,System.Drawing.Point,System.Drawing.Point,System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            Draws a Bézier spline defined by four points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawBezier(PdfSharp.Drawing.XPen,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Draws a Bézier spline defined by four points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawBezier(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
             <summary>
             Draws a Bézier spline defined by four points.
@@ -4744,14 +4881,61 @@
             Draws a Bézier spline defined by four points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawBeziers(PdfSharp.Drawing.XPen,System.Drawing.Point[])">
+            <summary>
+            Draws a series of Bézier splines from an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawBeziers(PdfSharp.Drawing.XPen,System.Drawing.PointF[])">
+            <summary>
+            Draws a series of Bézier splines from an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawBeziers(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[])">
             <summary>
             Draws a series of Bézier splines from an array of points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.Point[])">
+            <summary>
+            Draws a cardinal spline through a specified array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.Point[],System.Int32,System.Int32,System.Double)">
+            <summary>
+            Draws a cardinal spline through a specified array of point using a specified tension.
+            The drawing begins offset from the beginning of the array.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[])">
+            <summary>
+            Draws a cardinal spline through a specified array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[])">
             <summary>
             Draws a cardinal spline through a specified array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.Point[],System.Double)">
+            <summary>
+            Draws a cardinal spline through a specified array of points using a specified tension. 
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[],System.Double)">
+            <summary>
+            Draws a cardinal spline through a specified array of points using a specified tension. 
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[],System.Int32,System.Int32)">
+            <summary>
+            Draws a cardinal spline through a specified array of point. The drawing begins offset from the beginning of the array.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[],System.Int32,System.Int32,System.Double)">
+            <summary>
+            Draws a cardinal spline through a specified array of point using a specified tension.
+            The drawing begins offset from the beginning of the array.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[],System.Int32,System.Int32,System.Double)">
@@ -4765,6 +4949,16 @@
             Draws a cardinal spline through a specified array of points using a specified tension. 
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawArc(PdfSharp.Drawing.XPen,System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Draws an arc representing a portion of an ellipse.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawArc(PdfSharp.Drawing.XPen,System.Drawing.RectangleF,System.Double,System.Double)">
+            <summary>
+            Draws an arc representing a portion of an ellipse.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawArc(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect,System.Double,System.Double)">
             <summary>
             Draws an arc representing a portion of an ellipse.
@@ -4775,12 +4969,32 @@
             Draws an arc representing a portion of an ellipse.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,System.Drawing.Rectangle)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,System.Drawing.RectangleF)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect)">
             <summary>
             Draws a rectangle.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XBrush,System.Drawing.Rectangle)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XBrush,System.Drawing.RectangleF)">
             <summary>
             Draws a rectangle.
             </summary>
@@ -4795,6 +5009,16 @@
             Draws a rectangle.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Rectangle)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF)">
+            <summary>
+            Draws a rectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect)">
             <summary>
             Draws a rectangle.
@@ -4805,7 +5029,27 @@
             Draws a rectangle.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,System.Drawing.Rectangle[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,System.Drawing.RectangleF[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XBrush,System.Drawing.Rectangle[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XBrush,System.Drawing.RectangleF[])">
             <summary>
             Draws a series of rectangles.
             </summary>
@@ -4815,9 +5059,29 @@
             Draws a series of rectangles.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Rectangle[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF[])">
+            <summary>
+            Draws a series of rectangles.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRectangles(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect[])">
             <summary>
             Draws a series of rectangles.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,System.Drawing.Rectangle,System.Drawing.Size)">
+            <summary>
+            Draws a rectangles with round corners.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,System.Drawing.RectangleF,System.Drawing.SizeF)">
+            <summary>
+            Draws a rectangles with round corners.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect,PdfSharp.Drawing.XSize)">
@@ -4826,6 +5090,16 @@
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Draws a rectangles with round corners.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XBrush,System.Drawing.Rectangle,System.Drawing.Size)">
+            <summary>
+            Draws a rectangles with round corners.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XBrush,System.Drawing.RectangleF,System.Drawing.SizeF)">
             <summary>
             Draws a rectangles with round corners.
             </summary>
@@ -4840,6 +5114,16 @@
             Draws a rectangles with round corners.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Rectangle,System.Drawing.Size)">
+            <summary>
+            Draws a rectangles with round corners.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF,System.Drawing.SizeF)">
+            <summary>
+            Draws a rectangles with round corners.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawRoundedRectangle(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect,PdfSharp.Drawing.XSize)">
             <summary>
             Draws a rectangles with round corners.
@@ -4850,12 +5134,32 @@
             Draws a rectangles with round corners.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,System.Drawing.Rectangle)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,System.Drawing.RectangleF)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect)">
             <summary>
             Draws an ellipse defined by a bounding rectangle.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XBrush,System.Drawing.Rectangle)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XBrush,System.Drawing.RectangleF)">
             <summary>
             Draws an ellipse defined by a bounding rectangle.
             </summary>
@@ -4870,6 +5174,16 @@
             Draws an ellipse defined by a bounding rectangle.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Rectangle)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF)">
+            <summary>
+            Draws an ellipse defined by a bounding rectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawEllipse(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect)">
             <summary>
             Draws an ellipse defined by a bounding rectangle.
@@ -4880,7 +5194,27 @@
             Draws an ellipse defined by a bounding rectangle.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,System.Drawing.Point[])">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,System.Drawing.PointF[])">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode)">
             <summary>
             Draws a polygon defined by an array of points.
             </summary>
@@ -4890,9 +5224,29 @@
             Draws a polygon defined by an array of points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a polygon defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawPolygon(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XPoint[],PdfSharp.Drawing.XFillMode)">
             <summary>
             Draws a polygon defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,System.Drawing.RectangleF,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XRect,System.Double,System.Double)">
@@ -4901,6 +5255,16 @@
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XBrush,System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XBrush,System.Drawing.RectangleF,System.Double,System.Double)">
             <summary>
             Draws a pie defined by an ellipse.
             </summary>
@@ -4915,6 +5279,16 @@
             Draws a pie defined by an ellipse.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF,System.Double,System.Double)">
+            <summary>
+            Draws a pie defined by an ellipse.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawPie(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect,System.Double,System.Double)">
             <summary>
             Draws a pie defined by an ellipse.
@@ -4925,7 +5299,27 @@
             Draws a pie defined by an ellipse.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,System.Drawing.Point[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,System.Drawing.Point[],System.Double)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,System.Drawing.PointF[],System.Double)">
             <summary>
             Draws a closed cardinal spline defined by an array of points.
             </summary>
@@ -4935,7 +5329,27 @@
             Draws a closed cardinal spline defined by an array of points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.Point[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.PointF[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode)">
             <summary>
             Draws a closed cardinal spline defined by an array of points.
             </summary>
@@ -4945,7 +5359,27 @@
             Draws a closed cardinal spline defined by an array of points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode,System.Double)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode,System.Double)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XPoint[],PdfSharp.Drawing.XFillMode,System.Double)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Point[])">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.PointF[])">
             <summary>
             Draws a closed cardinal spline defined by an array of points.
             </summary>
@@ -4955,7 +5389,27 @@
             Draws a closed cardinal spline defined by an array of points.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XPoint[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.Point[],PdfSharp.Drawing.XFillMode,System.Double)">
+            <summary>
+            Draws a closed cardinal spline defined by an array of points.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawClosedCurve(PdfSharp.Drawing.XPen,PdfSharp.Drawing.XBrush,System.Drawing.PointF[],PdfSharp.Drawing.XFillMode,System.Double)">
             <summary>
             Draws a closed cardinal spline defined by an array of points.
             </summary>
@@ -4980,7 +5434,17 @@
             Draws a graphical path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,System.Drawing.PointF)">
+            <summary>
+            Draws the specified text string.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XPoint)">
+            <summary>
+            Draws the specified text string.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,System.Drawing.PointF,PdfSharp.Drawing.XStringFormat)">
             <summary>
             Draws the specified text string.
             </summary>
@@ -5000,7 +5464,17 @@
             Draws the specified text string.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF)">
+            <summary>
+            Draws the specified text string.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,PdfSharp.Drawing.XRect)">
+            <summary>
+            Draws the specified text string.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawString(System.String,PdfSharp.Drawing.XFont,PdfSharp.Drawing.XBrush,System.Drawing.RectangleF,PdfSharp.Drawing.XStringFormat)">
             <summary>
             Draws the specified text string.
             </summary>
@@ -5020,6 +5494,16 @@
             Measures the specified string when drawn with the specified font.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.Point)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.PointF)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,PdfSharp.Drawing.XPoint)">
             <summary>
             Draws the specified image.
@@ -5030,12 +5514,32 @@
             Draws the specified image.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.Rectangle)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.RectangleF)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,PdfSharp.Drawing.XRect)">
             <summary>
             Draws the specified image.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.Rectangle,System.Drawing.Rectangle,PdfSharp.Drawing.XGraphicsUnit)">
+            <summary>
+            Draws the specified image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.DrawImage(PdfSharp.Drawing.XImage,System.Drawing.RectangleF,System.Drawing.RectangleF,PdfSharp.Drawing.XGraphicsUnit)">
             <summary>
             Draws the specified image.
             </summary>
@@ -5093,6 +5597,18 @@
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphics.BeginContainer">
+            <summary>
+            Saves a graphics container with the current state of this XGraphics and 
+            opens and uses a new graphics container.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.BeginContainer(System.Drawing.Rectangle,System.Drawing.Rectangle,PdfSharp.Drawing.XGraphicsUnit)">
+            <summary>
+            Saves a graphics container with the current state of this XGraphics and 
+            opens and uses a new graphics container.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.BeginContainer(System.Drawing.RectangleF,System.Drawing.RectangleF,PdfSharp.Drawing.XGraphicsUnit)">
             <summary>
             Saves a graphics container with the current state of this XGraphics and 
             opens and uses a new graphics container.
@@ -5252,6 +5768,18 @@
             Applies a new transformation to the current transformation matrix.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.IntersectClip(System.Drawing.Rectangle)">
+            <summary>
+            Updates the clip region of this XGraphics to the intersection of the 
+            current clip region and the specified rectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.IntersectClip(System.Drawing.RectangleF)">
+            <summary>
+            Updates the clip region of this XGraphics to the intersection of the 
+            current clip region and the specified rectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphics.IntersectClip(PdfSharp.Drawing.XRect)">
             <summary>
             Updates the clip region of this XGraphics to the intersection of the 
@@ -5278,6 +5806,36 @@
         <member name="P:PdfSharp.Drawing.XGraphics.Transformer">
             <summary>
             (Under construction. May change in future versions.)
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.MakePointFArray(System.Drawing.Point[],System.Int32,System.Int32)">
+            <summary>
+            Converts a GdiPoint[] into a GdiPointF[].
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.MakePointFArray(PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Converts a XPoint[] into a GdiPointF[].
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.MakeXPointArray(System.Drawing.Point[],System.Int32,System.Int32)">
+            <summary>
+            Converts a Point[] into a XPoint[].
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.MakeXPointArray(System.Drawing.PointF[],System.Int32,System.Int32)">
+            <summary>
+            Converts a GdiPointF[] into a XPoint[].
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphics.MakeRectangleFArray(PdfSharp.Drawing.XRect[],System.Int32,System.Int32)">
+            <summary>
+            Converts a XRect[] into a GdiRectF[].
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Drawing.XGraphics._gfx">
+            <summary>
+            Always defined System.Drawing.Graphics object. Used as 'query context' for PDF pages.
             </summary>
         </member>
         <member name="F:PdfSharp.Drawing.XGraphics.DefaultViewMatrix">
@@ -5313,9 +5871,20 @@
             or null, if no such object exists.
             </summary>
         </member>
+        <member name="P:PdfSharp.Drawing.XGraphics.Graphics">
+            <summary>
+            Gets the System.Drawing.Graphics objects that serves as drawing surface if no PDF is rendered,
+            or null, if no such object exists.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.XGraphics.XGraphicsInternals">
             <summary>
             Provides access to internal data structures of the XGraphics class.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Drawing.XGraphics.XGraphicsInternals.Graphics">
+            <summary>
+            Gets the underlying Graphics object.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.XGraphics.SpaceTransformer">
@@ -5345,9 +5914,24 @@
             Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XGraphicsPath"/> class.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.#ctor(System.Drawing.PointF[],System.Byte[],PdfSharp.Drawing.XFillMode)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XGraphicsPath"/> class.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.Clone">
             <summary>
             Clones this instance.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLine(System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            Adds a line segment to current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLine(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Adds  a line segment to current figure.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLine(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
@@ -5360,9 +5944,29 @@
             Adds  a line segment to current figure.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLines(System.Drawing.Point[])">
+            <summary>
+            Adds a series of connected line segments to current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLines(System.Drawing.PointF[])">
+            <summary>
+            Adds a series of connected line segments to current figure.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddLines(PdfSharp.Drawing.XPoint[])">
             <summary>
             Adds a series of connected line segments to current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBezier(System.Drawing.Point,System.Drawing.Point,System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            Adds a cubic Bézier curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Adds a cubic Bézier curve to the current figure.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBezier(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
@@ -5375,12 +5979,42 @@
             Adds a cubic Bézier curve to the current figure.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBeziers(System.Drawing.Point[])">
+            <summary>
+            Adds a sequence of connected cubic Bézier curves to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBeziers(System.Drawing.PointF[])">
+            <summary>
+            Adds a sequence of connected cubic Bézier curves to the current figure.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddBeziers(PdfSharp.Drawing.XPoint[])">
             <summary>
             Adds a sequence of connected cubic Bézier curves to the current figure.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.Point[])">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.PointF[])">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.Point[],System.Double)">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.PointF[],System.Double)">
             <summary>
             Adds a spline curve to the current figure.
             </summary>
@@ -5390,9 +6024,29 @@
             Adds a spline curve to the current figure.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.Point[],System.Int32,System.Int32,System.Single)">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(System.Drawing.PointF[],System.Int32,System.Int32,System.Single)">
+            <summary>
+            Adds a spline curve to the current figure.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddCurve(PdfSharp.Drawing.XPoint[],System.Int32,System.Int32,System.Double)">
             <summary>
             Adds a spline curve to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddArc(System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Adds an elliptical arc to the current figure.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddArc(System.Drawing.RectangleF,System.Double,System.Double)">
+            <summary>
+            Adds an elliptical arc to the current figure.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddArc(PdfSharp.Drawing.XRect,System.Double,System.Double)">
@@ -5410,6 +6064,16 @@
             Adds an elliptical arc to the current figure. The arc is specified WPF like.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangle(System.Drawing.Rectangle)">
+            <summary>
+            Adds a rectangle to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangle(System.Drawing.RectangleF)">
+            <summary>
+            Adds a rectangle to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangle(PdfSharp.Drawing.XRect)">
             <summary>
             Adds a rectangle to this path.
@@ -5420,14 +6084,49 @@
             Adds a rectangle to this path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangles(System.Drawing.Rectangle[])">
+            <summary>
+            Adds a series of rectangles to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangles(System.Drawing.RectangleF[])">
+            <summary>
+            Adds a series of rectangles to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRectangles(PdfSharp.Drawing.XRect[])">
             <summary>
             Adds a series of rectangles to this path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRoundedRectangle(System.Drawing.Rectangle,System.Drawing.Size)">
+            <summary>
+            Adds a rectangle with rounded corners to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRoundedRectangle(System.Drawing.RectangleF,System.Drawing.SizeF)">
+            <summary>
+            Adds a rectangle with rounded corners to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRoundedRectangle(PdfSharp.Drawing.XRect,System.Drawing.SizeF)">
+            <summary>
+            Adds a rectangle with rounded corners to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddRoundedRectangle(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>
             Adds a rectangle with rounded corners to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddEllipse(System.Drawing.Rectangle)">
+            <summary>
+            Adds an ellipse to the current path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddEllipse(System.Drawing.RectangleF)">
+            <summary>
+            Adds an ellipse to the current path.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddEllipse(PdfSharp.Drawing.XRect)">
@@ -5440,9 +6139,29 @@
             Adds an ellipse to the current path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPolygon(System.Drawing.Point[])">
+            <summary>
+            Adds a polygon to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPolygon(System.Drawing.PointF[])">
+            <summary>
+            Adds a polygon to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPolygon(PdfSharp.Drawing.XPoint[])">
             <summary>
             Adds a polygon to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPie(System.Drawing.Rectangle,System.Double,System.Double)">
+            <summary>
+            Adds the outline of a pie shape to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPie(System.Drawing.RectangleF,System.Double,System.Double)">
+            <summary>
+            Adds the outline of a pie shape to this path.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddPie(PdfSharp.Drawing.XRect,System.Double,System.Double)">
@@ -5455,7 +6174,27 @@
             Adds the outline of a pie shape to this path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddClosedCurve(System.Drawing.Point[])">
+            <summary>
+            Adds a closed curve to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddClosedCurve(System.Drawing.PointF[])">
+            <summary>
+            Adds a closed curve to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddClosedCurve(PdfSharp.Drawing.XPoint[])">
+            <summary>
+            Adds a closed curve to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddClosedCurve(System.Drawing.Point[],System.Double)">
+            <summary>
+            Adds a closed curve to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddClosedCurve(System.Drawing.PointF[],System.Double)">
             <summary>
             Adds a closed curve to this path.
             </summary>
@@ -5470,10 +6209,43 @@
             Adds the specified path to this path.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,System.Drawing.Point,PdfSharp.Drawing.XStringFormat)">
+            <summary>
+            Adds a text string to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,System.Drawing.PointF,PdfSharp.Drawing.XStringFormat)">
+            <summary>
+            Adds a text string to this path.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XStringFormat)">
             <summary>
             Adds a text string to this path.
             </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,System.Drawing.Rectangle,PdfSharp.Drawing.XStringFormat)">
+            <summary>
+            Adds a text string to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,System.Drawing.RectangleF,PdfSharp.Drawing.XStringFormat)">
+            <summary>
+            Adds a text string to this path.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XGraphicsPath.SimulateBaselineOffset(PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,PdfSharp.Drawing.XStringFormat)">
+            <summary>
+            Calculates the offset for BaseLine positioning simulation:
+            In GDI we have only Near, Center and Far as LineAlignment and no BaseLine. For XLineAlignment.BaseLine StringAlignment.Near is returned.
+            We now return the negative drawed ascender height.
+            This has to be added to the LayoutRect/Origin before each _gdipPath.AddString().
+            </summary>
+            <param name="family"></param>
+            <param name="style"></param>
+            <param name="emSize"></param>
+            <param name="format"></param>
+            <returns></returns>
         </member>
         <member name="M:PdfSharp.Drawing.XGraphicsPath.AddString(System.String,PdfSharp.Drawing.XFontFamily,PdfSharp.Drawing.XFontStyle,System.Double,PdfSharp.Drawing.XRect,PdfSharp.Drawing.XStringFormat)">
             <summary>
@@ -5533,9 +6305,9 @@
             Grants access to internal objects of this class.
             </summary>
         </member>
-        <member name="F:PdfSharp.Drawing.XGraphicsPath._corePath">
+        <member name="F:PdfSharp.Drawing.XGraphicsPath._gdipPath">
             <summary>
-            Gets access to underlying Core graphics path.
+            Gets access to underlying GDI+ graphics path.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.XGraphicsPathInternals">
@@ -5544,25 +6316,15 @@
             This class prevents the public interface from pollution with internal functions.
             </summary>
         </member>
+        <member name="P:PdfSharp.Drawing.XGraphicsPathInternals.GdiPath">
+            <summary>
+            Gets the underlying GDI+ path object.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Drawing.XGraphicsState">
             <summary>
             Represents the internal state of an XGraphics object.
             This class is used as a handle for restoring the context.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Drawing.XBitmapSource">
-            <summary>
-            Defines an abstract base class for pixel based images.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XBitmapSource.PixelWidth">
-            <summary>
-            Gets the width of the image in pixels.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Drawing.XBitmapSource.PixelHeight">
-            <summary>
-            Gets the height of the image in pixels.
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.XImage">
@@ -5582,6 +6344,21 @@
             </summary>
             <param name="image">The image.</param>
             <exception cref="T:System.ArgumentNullException">image</exception>
+        </member>
+        <member name="M:PdfSharp.Drawing.XImage.#ctor(System.Drawing.Image)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XImage"/> class from a GDI+ image.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XImage.op_Implicit(System.Drawing.Image)~PdfSharp.Drawing.XImage">
+            <summary>
+            Implicit conversion from Image to XImage.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XImage.FromGdiPlusImage(System.Drawing.Image)">
+            <summary>
+            Conversion from Image to XImage.
+            </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XImage.FromFile(System.String)">
             <summary>
@@ -5745,7 +6522,27 @@
             Defines a Brush with a linear gradient.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XLinearGradientBrush.#ctor(System.Drawing.Point,System.Drawing.Point,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XLinearGradientBrush"/> class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XLinearGradientBrush.#ctor(System.Drawing.PointF,System.Drawing.PointF,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XLinearGradientBrush"/> class.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XLinearGradientBrush.#ctor(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XLinearGradientBrush"/> class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XLinearGradientBrush.#ctor(System.Drawing.Rectangle,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XLinearGradientMode)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XLinearGradientBrush"/> class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XLinearGradientBrush.#ctor(System.Drawing.RectangleF,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XColor,PdfSharp.Drawing.XLinearGradientMode)">
             <summary>
             Initializes a new instance of the <see cref="T:PdfSharp.Drawing.XLinearGradientBrush"/> class.
             </summary>
@@ -6050,6 +6847,11 @@
             Multiplies all points of the specified array with the this matrix.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XMatrix.TransformPoints(System.Drawing.Point[])">
+            <summary>
+            Multiplies all points of the specified array with the this matrix.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XMatrix.Transform(PdfSharp.Drawing.XVector)">
             <summary>
             Transforms the specified vector by this Matrix and returns the result.
@@ -6058,6 +6860,12 @@
         <member name="M:PdfSharp.Drawing.XMatrix.Transform(PdfSharp.Drawing.XVector[])">
             <summary>
             Transforms the specified vectors by this matrix.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XMatrix.TransformVectors(System.Drawing.PointF[])">
+            <summary>
+            Multiplies all vectors of the specified array with the this matrix. The translation elements 
+            of this matrix (third row) are ignored.
             </summary>
         </member>
         <member name="P:PdfSharp.Drawing.XMatrix.Determinant">
@@ -6103,6 +6911,21 @@
         <member name="P:PdfSharp.Drawing.XMatrix.OffsetY">
             <summary>
             Gets or sets the value of the third row and second  column of this matrix.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XMatrix.ToGdiMatrix">
+            <summary>
+            Converts this matrix to a System.Drawing.Drawing2D.Matrix object.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XMatrix.op_Explicit(PdfSharp.Drawing.XMatrix)~System.Drawing.Drawing2D.Matrix">
+            <summary>
+            Explicitly converts a XMatrix to a Matrix.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XMatrix.op_Implicit(System.Drawing.Drawing2D.Matrix)~PdfSharp.Drawing.XMatrix">
+            <summary>
+            Implicitly converts a Matrix to an XMatrix.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XMatrix.op_Equality(PdfSharp.Drawing.XMatrix,PdfSharp.Drawing.XMatrix)">
@@ -6366,6 +7189,11 @@
             <summary>
             Gets or sets a value indicating whether the pen enables overprint when used in a PDF document.
             Experimental, takes effect only on CMYK color mode.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPen.op_Implicit(System.Drawing.Pen)~PdfSharp.Drawing.XPen">
+            <summary>
+            Implicit conversion from Pen to XPen
             </summary>
         </member>
         <member name="T:PdfSharp.Drawing.XPens">
@@ -6807,6 +7635,16 @@
             Initializes a new instance of the XPoint class with the specified coordinates.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XPoint.#ctor(System.Drawing.Point)">
+            <summary>
+            Initializes a new instance of the XPoint class with the specified point.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPoint.#ctor(System.Drawing.PointF)">
+            <summary>
+            Initializes a new instance of the XPoint class with the specified point.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XPoint.op_Equality(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
             <summary>
             Determines whether two points are equal.
@@ -6855,6 +7693,11 @@
         <member name="P:PdfSharp.Drawing.XPoint.Y">
             <summary>
             Gets the x-coordinate of this XPoint.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPoint.ToPointF">
+            <summary>
+            Converts this XPoint to a System.Drawing.Point.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XPoint.ToString">
@@ -6973,7 +7816,30 @@
             Gets the global font collection.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XPrivateFontCollection.AddFont(System.Byte[],System.String)">
+            <summary>
+            Adds the font data to the font collections.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XPrivateFontCollection.AddFont(System.String)">
+            <summary>
+            Adds the specified font data to the global PrivateFontCollection.
+            Family name and style are automatically retrieved from the font.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPrivateFontCollection.AddFont(System.IO.Stream)">
+            <summary>
+            Adds the specified font data to the global PrivateFontCollection.
+            Family name and style are automatically retrieved from the font.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPrivateFontCollection.Add(System.IO.Stream)">
+            <summary>
+            Adds the specified font data to the global PrivateFontCollection.
+            Family name and style are automatically retrieved from the font.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XPrivateFontCollection.Add(System.Byte[])">
             <summary>
             Adds the specified font data to the global PrivateFontCollection.
             Family name and style are automatically retrieved from the font.
@@ -7011,6 +7877,16 @@
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XRect.#ctor(PdfSharp.Drawing.XSize)">
+            <summary>
+            Initializes a new instance of the XRect class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XRect.#ctor(System.Drawing.PointF,System.Drawing.SizeF)">
+            <summary>
+            Initializes a new instance of the XRect class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XRect.#ctor(System.Drawing.RectangleF)">
             <summary>
             Initializes a new instance of the XRect class.
             </summary>
@@ -7270,6 +8146,21 @@
             Multiplies the size of the current rectangle by the specified x and y values.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XRect.ToRectangleF">
+            <summary>
+            Converts this instance to a System.Drawing.RectangleF.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XRect.op_Implicit(System.Drawing.Rectangle)~PdfSharp.Drawing.XRect">
+            <summary>
+            Performs an implicit  conversion from a System.Drawing.Rectangle to an XRect.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XRect.op_Implicit(System.Drawing.RectangleF)~PdfSharp.Drawing.XRect">
+            <summary>
+            Performs an implicit  conversion from a System.Drawing.RectangleF to an XRect.
+            </summary>
+        </member>
         <member name="P:PdfSharp.Drawing.XRect.DebuggerDisplay">
             <summary>
             Gets the DebuggerDisplayAttribute text.
@@ -7322,6 +8213,11 @@
             Parses the size from a string.
             </summary>
         </member>
+        <member name="M:PdfSharp.Drawing.XSize.ToPointF">
+            <summary>
+            Converts this XSize to a PointF.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Drawing.XSize.ToXPoint">
             <summary>
             Converts this XSize to an XPoint.
@@ -7330,6 +8226,27 @@
         <member name="M:PdfSharp.Drawing.XSize.ToXVector">
             <summary>
             Converts this XSize to an XVector.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XSize.ToSizeF">
+            <summary>
+            Converts this XSize to a SizeF.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XSize.FromSize(System.Drawing.Size)">
+            <summary>
+            Creates an XSize from a System.Drawing.Size.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XSize.op_Implicit(System.Drawing.Size)~PdfSharp.Drawing.XSize">
+            <summary>
+            Implicit conversion from XSize to System.Drawing.Size. The conversion must be implicit because the
+            WinForms designer uses it.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Drawing.XSize.FromSizeF(System.Drawing.SizeF)">
+            <summary>
+            Creates an XSize from a System.Drawing.Size.
             </summary>
         </member>
         <member name="M:PdfSharp.Drawing.XSize.ToString">
@@ -8070,41 +8987,6 @@
             Converts the font into its binary representation.
             </summary>
         </member>
-        <member name="T:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache">
-            <summary>
-            Global table of all OpenType fontfaces cached by their face name and check sum.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.TryGetFontface(System.String,PdfSharp.Fonts.OpenType.OpenTypeFontface@)">
-            <summary>
-            Tries to get fontface by its key.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.TryGetFontface(System.UInt64,PdfSharp.Fonts.OpenType.OpenTypeFontface@)">
-            <summary>
-            Tries to get fontface by its check sum.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.Singleton">
-            <summary>
-            Gets the singleton.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache._fontfaceCache">
-            <summary>
-            Maps face name to OpenType fontface.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache._fontfacesByCheckSum">
-            <summary>
-            Maps font source key to OpenType fontface.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.DebuggerDisplay">
-            <summary>
-            Gets the DebuggerDisplayAttribute text.
-            </summary>
-        </member>
         <member name="T:PdfSharp.Fonts.OpenType.GlyphTypefaceCache">
             <summary>
             Global table of all glyph typefaces.
@@ -8362,6 +9244,41 @@
             Writes the offset table.
             </summary>
         </member>
+        <member name="T:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache">
+            <summary>
+            Global table of all OpenType fontfaces cached by their face name and check sum.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.TryGetFontface(System.String,PdfSharp.Fonts.OpenType.OpenTypeFontface@)">
+            <summary>
+            Tries to get fontface by its key.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.TryGetFontface(System.UInt64,PdfSharp.Fonts.OpenType.OpenTypeFontface@)">
+            <summary>
+            Tries to get fontface by its check sum.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.Singleton">
+            <summary>
+            Gets the singleton.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache._fontfaceCache">
+            <summary>
+            Maps face name to OpenType fontface.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache._fontfacesByCheckSum">
+            <summary>
+            Maps font source key to OpenType fontface.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Fonts.OpenType.OpenTypeFontfaceCache.DebuggerDisplay">
+            <summary>
+            Gets the DebuggerDisplayAttribute text.
+            </summary>
+        </member>
         <member name="T:PdfSharp.Fonts.OpenType.OpenTypeFontTable">
             <summary>
             Base class for all OpenType tables used in PDFsharp.
@@ -8613,37 +9530,92 @@
             Adds a ANSI characters.
             </summary>
         </member>
-        <member name="T:PdfSharp.Fonts.FontResolvingOptions">
+        <member name="T:PdfSharp.Fonts.FontDescriptorCache">
             <summary>
-            Parameters that affect font selection.
+            Global table of OpenType font descriptor objects.
             </summary>
         </member>
-        <member name="T:PdfSharp.Fonts.PlatformFontResolverInfo">
+        <member name="M:PdfSharp.Fonts.FontDescriptorCache.GetOrCreateDescriptorFor(PdfSharp.Drawing.XFont)">
             <summary>
-            Represents a font resolver info created by the platform font resolver.
+            Gets the FontDescriptor identified by the specified XFont. If no such object 
+            exists, a new FontDescriptor is created and added to the cache.
             </summary>
         </member>
-        <member name="T:PdfSharp.Fonts.PlatformFontResolver">
+        <member name="M:PdfSharp.Fonts.FontDescriptorCache.GetOrCreateDescriptor(System.String,PdfSharp.Drawing.XFontStyle)">
             <summary>
-            Default platform specific font resolving.
+            Gets the FontDescriptor identified by the specified FontSelector. If no such object 
+            exists, a new FontDescriptor is created and added to the stock.
             </summary>
         </member>
-        <member name="M:PdfSharp.Fonts.PlatformFontResolver.ResolveTypeface(System.String,System.Boolean,System.Boolean)">
+        <member name="P:PdfSharp.Fonts.FontDescriptorCache.Singleton">
             <summary>
-            Resolves the typeface by generating a font resolver info.
+            Gets the singleton.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.FontDescriptorCache._cache">
+            <summary>
+            Maps font font descriptor key to font descriptor.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Fonts.FontFactory">
+            <summary>
+            Provides functionality to map a fontface request to a physical font.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.FontFactory.ResolveTypeface(System.String,PdfSharp.Fonts.FontResolvingOptions,System.String)">
+            <summary>
+            Converts specified information about a required typeface into a specific font.
             </summary>
             <param name="familyName">Name of the font family.</param>
-            <param name="isBold">Indicates whether a bold font is requested.</param>
-            <param name="isItalic">Indicates whether an italic font is requested.</param>
+            <param name="fontResolvingOptions">The font resolving options.</param>
+            <param name="typefaceKey">Typeface key if already known by caller, null otherwise.</param>
+            <returns>
+            Information about the typeface, or null if no typeface can be found.
+            </returns>
         </member>
-        <member name="M:PdfSharp.Fonts.PlatformFontResolver.ResolveTypeface(System.String,PdfSharp.Fonts.FontResolvingOptions,System.String)">
+        <member name="M:PdfSharp.Fonts.FontFactory.RegisterFontFace(System.Byte[])">
             <summary>
-            Internal implementation.
+            Registers the font face.
             </summary>
         </member>
-        <member name="M:PdfSharp.Fonts.PlatformFontResolver.CreateFontSource(System.String,PdfSharp.Fonts.FontResolvingOptions,System.Drawing.Font@,System.String)">
+        <member name="M:PdfSharp.Fonts.FontFactory.GetFontSourceByFontName(System.String)">
             <summary>
-            Create a GDI+ font and use its handle to retrieve font data using native calls.
+            Gets the bytes of a physical font with specified face name.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.FontFactory.GetFontSourceByTypefaceKey(System.String)">
+            <summary>
+            Gets the bytes of a physical font with specified face name.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Fonts.FontFactory.HasFontSources">
+            <summary>
+            Gets a value indicating whether at least one font source was created.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.FontFactory.CacheFontSource(PdfSharp.Drawing.XFontSource)">
+            <summary>
+            Caches a font source under its face name and its key.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.FontFactory.CacheNewFontSource(System.String,PdfSharp.Drawing.XFontSource)">
+            <summary>
+            Caches a font source under its face name and its key.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.FontFactory.FontResolverInfosByName">
+            <summary>
+            Maps font typeface key to font resolver info.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.FontFactory.FontSourcesByName">
+            <summary>
+            Maps typeface key or font name to font source.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.FontFactory.FontSourcesByKey">
+            <summary>
+            Maps font source key to font source.
             </summary>
         </member>
         <member name="T:PdfSharp.Fonts.FontResolverInfo">
@@ -8720,135 +9692,9 @@
             Gets the DebuggerDisplayAttribute text.
             </summary>
         </member>
-        <member name="T:PdfSharp.Fonts.IFontResolver">
+        <member name="T:PdfSharp.Fonts.FontResolvingOptions">
             <summary>
-            Provides functionality that converts a requested typeface into a physical font.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.IFontResolver.ResolveTypeface(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Converts specified information about a required typeface into a specific font.
-            </summary>
-            <param name="familyName">Name of the font family.</param>
-            <param name="isBold">Set to <c>true</c> when a bold fontface is required.</param>
-            <param name="isItalic">Set to <c>true</c> when an italic fontface is required.</param>
-            <returns>Information about the physical font, or null if the request cannot be satisfied.</returns>
-        </member>
-        <member name="M:PdfSharp.Fonts.IFontResolver.GetFont(System.String)">
-            <summary>
-            Gets the bytes of a physical font with specified face name.
-            </summary>
-            <param name="faceName">A face name previously retrieved by ResolveTypeface.</param>
-        </member>
-        <member name="T:PdfSharp.Fonts.GlobalFontSettings">
-            <summary>
-            Provides functionality to specify information about the handling of fonts in the current application domain.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.GlobalFontSettings.DefaultFontName">
-            <summary>
-            The name of the default font.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.GlobalFontSettings.FontResolver">
-            <summary>
-            Gets or sets the global font resolver for the current application domain.
-            This static function must be called only once and before any font operation was executed by PDFsharp.
-            If this is not easily to obtain, e.g. because your code is running on a web server, you must provide the
-            same instance of your font resolver in every subsequent setting of this property.
-            In a web application set the font resolver in Global.asax.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.GlobalFontSettings.DefaultFontEncoding">
-            <summary>
-            Gets or sets the default font encoding used for XFont objects where encoding is not explicitly specified.
-            If it is not set, the default value is PdfFontEncoding.Unicode.
-            If you are sure your document contains only Windows-1252 characters (see https://en.wikipedia.org/wiki/Windows-1252) 
-            set default encoding to PdfFontEncodingj.Windows1252.
-            Must be set only once per app domain.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Fonts.FontDescriptorCache">
-            <summary>
-            Global table of OpenType font descriptor objects.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontDescriptorCache.GetOrCreateDescriptorFor(PdfSharp.Drawing.XFont)">
-            <summary>
-            Gets the FontDescriptor identified by the specified XFont. If no such object 
-            exists, a new FontDescriptor is created and added to the cache.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontDescriptorCache.GetOrCreateDescriptor(System.String,PdfSharp.Drawing.XFontStyle)">
-            <summary>
-            Gets the FontDescriptor identified by the specified FontSelector. If no such object 
-            exists, a new FontDescriptor is created and added to the stock.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.FontDescriptorCache.Singleton">
-            <summary>
-            Gets the singleton.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.FontDescriptorCache._cache">
-            <summary>
-            Maps font font descriptor key to font descriptor.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Fonts.FontFactory">
-            <summary>
-            Provides functionality to map a fontface request to a physical font.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontFactory.ResolveTypeface(System.String,PdfSharp.Fonts.FontResolvingOptions,System.String)">
-            <summary>
-            Converts specified information about a required typeface into a specific font.
-            </summary>
-            <param name="familyName">Name of the font family.</param>
-            <param name="fontResolvingOptions">The font resolving options.</param>
-            <param name="typefaceKey">Typeface key if already known by caller, null otherwise.</param>
-            <returns>
-            Information about the typeface, or null if no typeface can be found.
-            </returns>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontFactory.GetFontSourceByFontName(System.String)">
-            <summary>
-            Gets the bytes of a physical font with specified face name.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontFactory.GetFontSourceByTypefaceKey(System.String)">
-            <summary>
-            Gets the bytes of a physical font with specified face name.
-            </summary>
-        </member>
-        <member name="P:PdfSharp.Fonts.FontFactory.HasFontSources">
-            <summary>
-            Gets a value indicating whether at least one font source was created.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontFactory.CacheFontSource(PdfSharp.Drawing.XFontSource)">
-            <summary>
-            Caches a font source under its face name and its key.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Fonts.FontFactory.CacheNewFontSource(System.String,PdfSharp.Drawing.XFontSource)">
-            <summary>
-            Caches a font source under its face name and its key.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.FontFactory.FontResolverInfosByName">
-            <summary>
-            Maps font typeface key to font resolver info.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.FontFactory.FontSourcesByName">
-            <summary>
-            Maps typeface key or font name to font source.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Fonts.FontFactory.FontSourcesByKey">
-            <summary>
-            Maps font source key to font source.
+            Parameters that affect font selection.
             </summary>
         </member>
         <member name="T:PdfSharp.Fonts.FontWriter">
@@ -8920,6 +9766,459 @@
         <member name="P:PdfSharp.Fonts.FontWriter.Stream">
             <summary>
             Gets the underlying stream.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Fonts.GlobalFontSettings">
+            <summary>
+            Provides functionality to specify information about the handling of fonts in the current application domain.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Fonts.GlobalFontSettings.DefaultFontName">
+            <summary>
+            The name of the default font.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Fonts.GlobalFontSettings.FontResolver">
+            <summary>
+            Gets or sets the global font resolver for the current application domain.
+            This static function must be called only once and before any font operation was executed by PDFsharp.
+            If this is not easily to obtain, e.g. because your code is running on a web server, you must provide the
+            same instance of your font resolver in every subsequent setting of this property.
+            In a web application set the font resolver in Global.asax.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Fonts.GlobalFontSettings.DefaultFontEncoding">
+            <summary>
+            Gets or sets the default font encoding used for XFont objects where encoding is not explicitly specified.
+            If it is not set, the default value is PdfFontEncoding.Unicode.
+            If you are sure your document contains only Windows-1252 characters (see https://en.wikipedia.org/wiki/Windows-1252) 
+            set default encoding to PdfFontEncodingj.Windows1252.
+            Must be set only once per app domain.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Fonts.IFontResolver">
+            <summary>
+            Provides functionality that converts a requested typeface into a physical font.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.IFontResolver.ResolveTypeface(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Converts specified information about a required typeface into a specific font.
+            </summary>
+            <param name="familyName">Name of the font family.</param>
+            <param name="isBold">Set to <c>true</c> when a bold fontface is required.</param>
+            <param name="isItalic">Set to <c>true</c> when an italic fontface is required.</param>
+            <returns>Information about the physical font, or null if the request cannot be satisfied.</returns>
+        </member>
+        <member name="M:PdfSharp.Fonts.IFontResolver.GetFont(System.String)">
+            <summary>
+            Gets the bytes of a physical font with specified face name.
+            </summary>
+            <param name="faceName">A face name previously retrieved by ResolveTypeface.</param>
+        </member>
+        <member name="T:PdfSharp.Fonts.PlatformFontResolver">
+            <summary>
+            Default platform specific font resolving.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.PlatformFontResolver.ResolveTypeface(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Resolves the typeface by generating a font resolver info.
+            </summary>
+            <param name="familyName">Name of the font family.</param>
+            <param name="isBold">Indicates whether a bold font is requested.</param>
+            <param name="isItalic">Indicates whether an italic font is requested.</param>
+        </member>
+        <member name="M:PdfSharp.Fonts.PlatformFontResolver.ResolveTypeface(System.String,PdfSharp.Fonts.FontResolvingOptions,System.String)">
+            <summary>
+            Internal implementation.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Fonts.PlatformFontResolver.CreateFontSource(System.String,PdfSharp.Fonts.FontResolvingOptions,System.Drawing.Font@,System.String)">
+            <summary>
+            Create a GDI+ font and use its handle to retrieve font data using native calls.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Fonts.PlatformFontResolverInfo">
+            <summary>
+            Represents a font resolver info created by the platform font resolver.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.ColorComboBox">
+            <summary>
+            A combo box control for selection XColor values.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.ColorComboBox.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Forms.ColorComboBox"/> class.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.ColorComboBox.Color">
+            <summary>
+            Gets or sets the custom color.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.ColorComboBox.OnDropDownStyleChanged(System.EventArgs)">
+            <summary>
+            Keep control a drop down combo box.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.ColorComboBox.OnSelectedIndexChanged(System.EventArgs)">
+            <summary>
+            Sets the color with the selected item.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.ColorComboBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs)">
+            <summary>
+            Draw a color entry.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.ColorComboBox.ColorItem">
+            <summary>
+            Represents a combo box item.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.DeviceInfos">
+            <summary>
+            Contains information about a physical device like a display or a printer.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.HorizontalSize">
+            <summary>
+            Width, in millimeters, of the physical screen or device.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.VerticalSize">
+            <summary>
+            Height, in millimeters, of the physical screen or device.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.HorizontalResolution">
+            <summary>
+            Width, in pixels, of the screen or device.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.VerticalResolution">
+            <summary>
+            Height, in pixels, of the screen or device.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.LogicalDpiX">
+            <summary>
+            Number of pixels per logical inch along the screen or device width.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.LogicalDpiY">
+            <summary>
+            Number of pixels per logical inch along the screen or device height.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.PhysicalDpiX">
+            <summary>
+            Number of pixels per physical inch along the screen or device width.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.PhysicalDpiY">
+            <summary>
+            Number of pixels per physical inch along the screen or device height.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.ScaleX">
+            <summary>
+            The ratio of LogicalDpiX and PhysicalDpiX.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.DeviceInfos.ScaleY">
+            <summary>
+            The ratio of LogicalDpiY and PhysicalDpiY.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.DeviceInfos.GetInfos(System.IntPtr)">
+            <summary>
+            Gets a DeviceInfo for the specifed device context.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.RenderMode">
+            <summary>
+            Specifies how to reander the preview.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.RenderMode.Direct">
+            <summary>
+            Draw immediately.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.RenderMode.Metafile">
+            <summary>
+            Draw using a metafile.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.RenderMode.Bitmap">
+            <summary>
+            Draw using a bitmap image.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.Zoom">
+            <summary>
+            Defines a zoom factor used in the preview control.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Mininum">
+            <summary>
+            The smallest possible zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Maximum">
+            <summary>
+            The largest possible zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent800">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent600">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent400">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent200">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent150">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent100">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent75">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent50">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent25">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.Percent10">
+            <summary>
+            A pre-defined zoom factor.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.BestFit">
+            <summary>
+            Sets the zoom factor so that the document fits horizontally into the window.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.TextFit">
+            <summary>
+            Sets the zoom factor so that the printable area of the document fits horizontally into the window.
+            Currently not yet implemented and the same as ZoomBestFit.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.FullPage">
+            <summary>
+            Sets the zoom factor so that the whole document fits completely into the window.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.Zoom.OriginalSize">
+            <summary>
+            Sets the zoom factor so that the document is displayed in its real physical size (based on the DPI information returned from the OS for the current monitor).
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.PagePreview">
+            <summary>
+            Represents a preview control for an XGraphics page. Can be used as an alternative to
+            System.Windows.Forms.PrintPreviewControl.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.PagePreview.RenderEvent">
+            <summary>
+            A delegate for invoking the render function.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Forms.PagePreview"/> class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.BorderStyle">
+            <summary>
+            Gets or sets the border style of the control.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.PageGraphicsUnit">
+            <summary>
+            Gets or sets the XGraphicsUnit of the page.
+            The default value is XGraphicsUnit.Point.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.PageUnit">
+            <summary>
+            This property was renamed. Use new property PageGraphicsUnit.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.Zoom">
+            <summary>
+            Gets or sets a predefined zoom factor.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.ZoomPercent">
+            <summary>
+            Gets or sets an arbitrary zoom factor. The range is from 10 to 800.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.PageColor">
+            <summary>
+            Gets or sets the color of the page.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.DesktopColor">
+            <summary>
+            Gets or sets the color of the desktop.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.ShowScrollbars">
+            <summary>
+            Gets or sets a value indicating whether the scrollbars are visible.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.ShowPage">
+            <summary>
+            Gets or sets a value indicating whether the page is visible.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.PageSize">
+            <summary>
+            Gets or sets the page size in point.
+            </summary>
+        </member>
+        <member name="P:PdfSharp.Forms.PagePreview.PageSizeF">
+            <summary>
+            This is a hack for Visual Studio 2008. The designer uses reflection for setting the PageSize property.
+            This fails, even an implicit operator that converts Size to XSize exits.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.SetRenderFunction(System.Action{PdfSharp.Drawing.XGraphics})">
+            <summary>
+            Sets a delegate that is invoked when the preview wants to be painted.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.SetRenderEvent(PdfSharp.Forms.PagePreview.RenderEvent)">
+            <summary>
+            Sets a delegate that is invoked when the preview wants to be painted.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.OnZoomChanged(System.EventArgs)">
+            <summary>
+            Raises the ZoomChanged event when the zoom factor changed.
+            </summary>
+        </member>
+        <member name="E:PdfSharp.Forms.PagePreview.ZoomChanged">
+            <summary>
+            Occurs when the zoom factor changed.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Paints the background with the sheet of paper.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.OnSizeChanged(System.EventArgs)">
+            <summary>
+            Recalculates the preview dimension.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.OnInvalidated(System.Windows.Forms.InvalidateEventArgs)">
+            <summary>
+            Invalidates the canvas.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.OnLayout(System.Windows.Forms.LayoutEventArgs)">
+            <summary>
+            Layouts the child controls.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.CalculatePreviewDimension(System.Boolean@)">
+            <summary>
+            Calculates all values for drawing the page preview.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.PaintBackground(System.Drawing.Graphics)">
+            <summary>
+            Paints the background and the empty page.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.DrawDash(System.Drawing.Graphics,System.Drawing.Rectangle)">
+            <summary>
+            Check clipping rectangle calculations.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Forms.PagePreview.SetScrollBarRange">
+            <summary>
+            Adjusts scroll bars.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.PagePreview._posOffset">
+            <summary>
+            Upper left corner of scroll area.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.PagePreview._pageSize">
+            <summary>
+            Real page size in point.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.PagePreview._virtualPage">
+            <summary>
+            Page in pixel relative to virtual canvas.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.PagePreview._virtualCanvas">
+            <summary>
+            The size in pixels of an area that completely contains the virtual page and at least a small 
+            border around it. If this area is larger than the canvas window, it is scrolled.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Forms.PagePreview._printableArea">
+            <summary>
+            Printable area in point.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Forms.PagePreviewCanvas">
+            <summary>
+            Implements the control that previews the page.
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.AcroForms.PdfAcroFieldFlags">
@@ -9776,32 +11075,6 @@
             Go to last page.
             </summary>
         </member>
-        <member name="T:PdfSharp.Pdf.Actions.PdfGoToAction">
-            <summary>
-            Represents a PDF Goto actions.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Pdf.Actions.PdfGoToAction.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Pdf.Actions.PdfGoToAction"/> class.
-            </summary>
-        </member>
-        <member name="M:PdfSharp.Pdf.Actions.PdfGoToAction.#ctor(PdfSharp.Pdf.PdfDocument)">
-            <summary>
-            Initializes a new instance of the <see cref="T:PdfSharp.Pdf.Actions.PdfGoToAction"/> class.
-            </summary>
-            <param name="document">The document that owns this object.</param>
-        </member>
-        <member name="T:PdfSharp.Pdf.Actions.PdfGoToAction.Keys">
-            <summary>
-            Predefined keys of this dictionary.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.Actions.PdfGoToAction.Keys.D">
-            <summary>
-            (Required) The destination to jump to (see Section 8.2.1, “Destinations”).
-            </summary>
-        </member>
         <member name="T:PdfSharp.Pdf.Actions.PdfAction">
             <summary>
             Represents the base class for all PDF actions.
@@ -9840,6 +11113,32 @@
             after the action represented by this dictionary. The value is either a
             single action dictionary or an array of action dictionaries to be performed
             in order; see below for further discussion.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Pdf.Actions.PdfGoToAction">
+            <summary>
+            Represents a PDF Goto actions.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Pdf.Actions.PdfGoToAction.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Pdf.Actions.PdfGoToAction"/> class.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Pdf.Actions.PdfGoToAction.#ctor(PdfSharp.Pdf.PdfDocument)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PdfSharp.Pdf.Actions.PdfGoToAction"/> class.
+            </summary>
+            <param name="document">The document that owns this object.</param>
+        </member>
+        <member name="T:PdfSharp.Pdf.Actions.PdfGoToAction.Keys">
+            <summary>
+            Predefined keys of this dictionary.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.Actions.PdfGoToAction.Keys.D">
+            <summary>
+            (Required) The destination to jump to (see Section 8.2.1, “Destinations”).
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.Advanced.PdfCatalog">
@@ -16118,49 +17417,6 @@
             The document is disposed.
             </summary>
         </member>
-        <member name="T:PdfSharp.Pdf.PdfFlateEncodeMode">
-            <summary>
-            Sets the mode for the Deflater (FlateEncoder).
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.Default">
-            <summary>
-            The default mode.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.BestSpeed">
-            <summary>
-            Fast encoding, but larger PDF files.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.BestCompression">
-            <summary>
-            Best compression, but takes more time.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages">
-            <summary>
-            Specifies whether to compress JPEG images with the FlateDecode filter.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Automatic">
-            <summary>
-            PDFsharp will try FlateDecode and use it if it leads to a reduction in PDF file size.
-            When FlateEncodeMode is set to BestCompression, this is more likely to reduce the file size,
-            but it takes considerably more time to create the PDF file.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Never">
-            <summary>
-            PDFsharp will never use FlateDecode - files may be a few bytes larger, but file creation is faster.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Always">
-            <summary>
-            PDFsharp will always use FlateDecode, even if this leads to larger files;
-            this option is meant for testing purposes only and should not be used for production code.
-            </summary>
-        </member>
         <member name="T:PdfSharp.Pdf.PdfColorMode">
             <summary>
             Specifies what color model is used in a PDF document.
@@ -16199,6 +17455,26 @@
         <member name="F:PdfSharp.Pdf.PdfCustomValueCompressionMode.Compressed">
             <summary>
             Compress custom values using FlateDecode.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Pdf.PdfFlateEncodeMode">
+            <summary>
+            Sets the mode for the Deflater (FlateEncoder).
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.Default">
+            <summary>
+            The default mode.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.BestSpeed">
+            <summary>
+            Fast encoding, but larger PDF files.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfFlateEncodeMode.BestCompression">
+            <summary>
+            Best compression, but takes more time.
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.PdfFontEmbedding">
@@ -16246,6 +17522,31 @@
         <member name="F:PdfSharp.Pdf.PdfFontEncoding.Automatic">
             <summary>
             Unicode encoding.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Pdf.PdfOutlineStyle">
+            <summary>
+            Specifies the font style for the outline (bookmark) text.
+             </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Regular">
+            <summary>
+            Outline text is displayed using a regular font.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Italic">
+            <summary>
+            Outline text is displayed using an italic font.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Bold">
+            <summary>
+            Outline text is displayed using a bold font.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.BoldItalic">
+            <summary>
+            Outline text is displayed using a bold and italic font.
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.PdfPageDestinationType">
@@ -16308,31 +17609,6 @@
             Display the page with the horizontal coordinate left positioned at the left edge of
             the window and the contents of the page magnified just enough to fit the entire
             height of its bounding box within the window.
-            </summary>
-        </member>
-        <member name="T:PdfSharp.Pdf.PdfOutlineStyle">
-            <summary>
-            Specifies the font style for the outline (bookmark) text.
-             </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Regular">
-            <summary>
-            Outline text is displayed using a regular font.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Italic">
-            <summary>
-            Outline text is displayed using an italic font.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.Bold">
-            <summary>
-            Outline text is displayed using a bold font.
-            </summary>
-        </member>
-        <member name="F:PdfSharp.Pdf.PdfOutlineStyle.BoldItalic">
-            <summary>
-            Outline text is displayed using a bold and italic font.
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.PdfPageLayout">
@@ -16434,6 +17710,29 @@
         <member name="F:PdfSharp.Pdf.PdfTextStringEncoding.Unicode">
             <summary>
             Specifies that hypertext uses unicode encoding.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages">
+            <summary>
+            Specifies whether to compress JPEG images with the FlateDecode filter.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Automatic">
+            <summary>
+            PDFsharp will try FlateDecode and use it if it leads to a reduction in PDF file size.
+            When FlateEncodeMode is set to BestCompression, this is more likely to reduce the file size,
+            but it takes considerably more time to create the PDF file.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Never">
+            <summary>
+            PDFsharp will never use FlateDecode - files may be a few bytes larger, but file creation is faster.
+            </summary>
+        </member>
+        <member name="F:PdfSharp.Pdf.PdfUseFlateDecoderForJpegImages.Always">
+            <summary>
+            PDFsharp will always use FlateDecode, even if this leads to larger files;
+            this option is meant for testing purposes only and should not be used for production code.
             </summary>
         </member>
         <member name="T:PdfSharp.Pdf.KeysBase">
@@ -19455,10 +20754,21 @@
             that this function is for internal use only.
             </summary>
         </member>
+        <member name="M:PdfSharp.Pdf.PdfRectangle.#ctor(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Initializes a new instance of the PdfRectangle class with two points specifying
+            two diagonally opposite corners.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Pdf.PdfRectangle.#ctor(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
             <summary>
             Initializes a new instance of the PdfRectangle class with two points specifying
             two diagonally opposite corners.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Pdf.PdfRectangle.#ctor(System.Drawing.PointF,System.Drawing.SizeF)">
+            <summary>
+            Initializes a new instance of the PdfRectangle class with the specified location and size.
             </summary>
         </member>
         <member name="M:PdfSharp.Pdf.PdfRectangle.#ctor(PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XSize)">
@@ -19551,6 +20861,11 @@
             Gets or sets the size of this PdfRectangle.
             </summary>
         </member>
+        <member name="M:PdfSharp.Pdf.PdfRectangle.Contains(System.Drawing.PointF)">
+            <summary>
+            Determines if the specified point is contained within this PdfRectangle.
+            </summary>
+        </member>
         <member name="M:PdfSharp.Pdf.PdfRectangle.Contains(PdfSharp.Drawing.XPoint)">
             <summary>
             Determines if the specified point is contained within this PdfRectangle.
@@ -19559,6 +20874,11 @@
         <member name="M:PdfSharp.Pdf.PdfRectangle.Contains(System.Double,System.Double)">
             <summary>
             Determines if the specified point is contained within this PdfRectangle.
+            </summary>
+        </member>
+        <member name="M:PdfSharp.Pdf.PdfRectangle.Contains(System.Drawing.RectangleF)">
+            <summary>
+            Determines if the rectangular region represented by rect is entirely contained within this PdfRectangle.
             </summary>
         </member>
         <member name="M:PdfSharp.Pdf.PdfRectangle.Contains(PdfSharp.Drawing.XRect)">

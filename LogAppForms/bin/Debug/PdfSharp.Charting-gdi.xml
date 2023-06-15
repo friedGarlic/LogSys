@@ -1,14 +1,9 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>PdfSharp.Charting</name>
+        <name>PdfSharp.Charting-gdi</name>
     </assembly>
     <members>
-        <member name="T:PdfSharp.VersionInfo">
-            <summary>
-            Version info of this assembly.
-            </summary>
-        </member>
         <member name="T:PdfSharp.Charting.Renderers.AreaChartRenderer">
             <summary>
             Represents an area chart renderer.
@@ -3030,6 +3025,11 @@
         <member name="M:PdfSharp.Charting.XValues.AddXSeries">
             <summary>
             Adds a new XSeries to the collection.
+            </summary>
+        </member>
+        <member name="T:PdfSharp.VersionInfo">
+            <summary>
+            Version info of this assembly.
             </summary>
         </member>
     </members>

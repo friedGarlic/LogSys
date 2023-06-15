@@ -55,6 +55,7 @@ namespace LogAppForms
         private void AdminForm_Load(object sender, EventArgs e)
         {
             LoadChart();
+            LoadPieChart();
             OpenConnectionFilter();
             HashSet<string> uniqueItems = new HashSet<string>();//stores address
 
@@ -251,11 +252,34 @@ namespace LogAppForms
                 connection.Close();
             }
         }
+        private void LoadPieChart()
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT ItemName, Quantity FROM Items";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string itemName = reader.GetString(0);
+                            int quantity = reader.GetInt32(1);
+
+                            chart2.Series["NumberOfItems"].Points.AddXY(itemName, quantity);
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
 
         private void button9_Click(object sender, EventArgs e)
         {
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\EkisReport.pdf";
-            SaveAsAnalytics(filePath, this);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -663,31 +687,19 @@ namespace LogAppForms
                 y += cellHeight;
             }
 
-            document.Save(filePath);
-        }
-        public void SaveAsAnalytics(string filePath, Form form)
-        {
-            PdfDocument pdfDocument = new PdfDocument();
-
-            PdfPage pdfPage = pdfDocument.AddPage();
-
-            XGraphics pdfGraphics = XGraphics.FromPdfPage(pdfPage);
-
-            using (Bitmap bitmap = new Bitmap(form.Width, form.Height))
+            // Draw the chart
+            PdfPage chartPage = document.AddPage();
+            XGraphics chartGfx = XGraphics.FromPdfPage(chartPage);
+            XImage xImage = null;
+            using (Bitmap chartImage = new Bitmap(chart1.Width, chart1.Height))
             {
-                form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    bitmap.Save(ms, ImageFormat.Png);
-
-                    XImage xImage = XImage.FromStream(ms);
-
-                    pdfGraphics.DrawImage(xImage, 150, 150);
-                }
+                chart1.DrawToBitmap(chartImage, new Rectangle(0, 0, chart1.Width, chart1.Height));
+                xImage = XImage.FromGdiPlusImage(chartImage);
+                chartGfx.DrawImage(xImage, new XRect(chartPage.Width - chart1.Width - 10, chartPage.Height - chart1.Height - 10, chart1.Width, chart1.Height));
             }
 
-            pdfDocument.Save(filePath);
+            document.Save(filePath);
+            document.Close();
         }
     }
 }
