@@ -198,7 +198,9 @@
             this.Controls.Add(this.contactInfo_value);
             this.Controls.Add(this.age_value);
             this.Controls.Add(this.studentID_value);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "UserForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UserForm";
             this.ResumeLayout(false);
             this.PerformLayout();

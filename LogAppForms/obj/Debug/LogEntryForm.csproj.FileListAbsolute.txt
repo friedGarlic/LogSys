@@ -74,3 +74,9 @@ C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.application
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogEntryForm.csproj.CopyComplete
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.exe
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.pdb
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp.Charting.dll
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp.dll
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp.xml
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\PdfSharp.Charting.xml
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\de\PdfSharp.resources.dll
+C:\Users\Rem\source\repos\LogSys\LogAppForms\bin\Debug\de\PdfSharp.Charting.resources.dll

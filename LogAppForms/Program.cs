@@ -19,7 +19,7 @@ namespace LogAppForms
             Application.SetCompatibleTextRenderingDefault(false);
 
             LogAppLibrary.GlobalConfig.In_Connection(DatabaseType.Sql);
-            Application.Run(new EntryForm());
+            Application.Run(new AdminForm());
         }
     }
 }

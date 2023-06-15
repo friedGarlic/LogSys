@@ -10,6 +10,11 @@ using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace LogAppForms
 {
@@ -22,6 +27,9 @@ namespace LogAppForms
         private DataSet ds, ds2, ds3;
         private DataView dataView,dataView2, dataView3;
         private PrintDocument printDocument;
+
+        bool drag = false;
+        Point start_point = new Point(0, 0);
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -42,6 +50,94 @@ namespace LogAppForms
             InitializeComponent();
             printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
+        }
+
+        private void AdminForm_Load(object sender, EventArgs e)
+        {
+            LoadChart();
+            OpenConnectionFilter();
+            HashSet<string> uniqueItems = new HashSet<string>();//stores address
+
+            foreach (DataRow dr3 in dataView3.ToTable().Rows)
+            {
+                foreach (DataRow dr in dataView2.ToTable().Rows)
+                {
+                    string studentIdNumber = dr[1].ToString(); //store the value of what column StudentIdNumber of each row on above 'foreach'
+                    DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'"); //combine StudentID and StudentIdNumber of 2 different table with the same value
+
+                    foreach (DataRow dr2 in relatedRows)
+                    {
+                        string itemText = $"{dr[1]} {dr[2]}";
+
+                        if (dr[3].ToString().Contains("Borrow") || dr[3].ToString().Contains("Return"))
+                        {
+                            if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                            {
+                                listView1.Items.Add(new ListViewItem(new string[]
+                                {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString(),
+                                    dr[4].ToString(),
+                                    dr[5].ToString()
+                                }));
+
+                                uniqueItems.Add(itemText); // add to array if unique
+                            }
+                        }
+                        else
+                        {
+                            if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
+                            {
+                                listView1.Items.Add(new ListViewItem(new string[]
+                                {
+                                    dr[1].ToString(),
+                                    dr[2].ToString(),
+                                    dr[3].ToString(),
+                                    dr2[3].ToString(),
+                                    dr2[4].ToString(),
+                                    dr2[5].ToString()
+                                }));
+
+                                uniqueItems.Add(itemText); // add to array if unique
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            drag = true;
+            start_point = new Point(e.X, e.Y);
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            drag = false;
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (drag)
+            {
+                Point p = PointToScreen(e.Location);
+                this.Location = new Point(p.X - start_point.X, p.Y - start_point.Y); ;
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -111,6 +207,13 @@ namespace LogAppForms
             e.HasMorePages = false;
         }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\LogSysReport.pdf";
+            MessageBox.Show("Saved as PDF to Desktop");
+            SaveAsPDF(filePath);
+        }
+
         private void PrintListView()
         {
             PrintDialog printDialog = new PrintDialog();
@@ -122,6 +225,39 @@ namespace LogAppForms
             }
         }
 
+        private void LoadChart()
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT DISTINCT StudentIdNumber FROM DateTimeTable";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string studentId = reader.GetString(0); // Assuming StudentIdNumber is of type VARCHAR
+
+                            UserModel model = new UserModel(studentId);
+                            TimeSpan totalDuration = GetTotalDuration(model);
+
+                            chart1.Series["Hours"].Points.AddXY(studentId, totalDuration.Minutes);
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\EkisReport.pdf";
+            SaveAsAnalytics(filePath, this);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             foreach (var series in chart1.Series)
@@ -130,29 +266,7 @@ namespace LogAppForms
             }
             if (textBox1.TextLength == 0)
             {
-                using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
-                {
-                    connection.Open();
-
-                    string sqlQuery = "SELECT DISTINCT StudentIdNumber FROM DateTimeTable";
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string studentId = reader.GetString(0); // Assuming StudentIdNumber is of type VARCHAR
-
-                                UserModel model = new UserModel(studentId);
-                                TimeSpan totalDuration = GetTotalDuration(model);
-
-                                chart1.Series["Hours"].Points.AddXY(studentId, totalDuration.Minutes);
-                            }
-                        }
-                    }
-
-                    connection.Close();
-                }
+                LoadChart();
             }
             else
             {
@@ -161,8 +275,13 @@ namespace LogAppForms
 
                 chart1.Series["Hours"].Points.AddXY(textBox1.Text, totalDuration.Minutes);
             }
-            
+            OpenConnectionFilter();
 
+
+            filter();
+        }
+        private void OpenConnectionFilter()
+        {
             _conn.Open();
             cmd = new SqlCommand("SELECT * FROM Students", _conn);
             cmd2 = new SqlCommand("SELECT * FROM DateTimeTable", _conn);
@@ -179,7 +298,7 @@ namespace LogAppForms
             adapter.Fill(ds, "dbo.Students");
             adapter2.Fill(ds2, "dbo.DateTimeTable");
             adapter3.Fill(ds3, "dbo.Items");
-            
+
             _conn.Close();
 
             dt = ds.Tables["dbo.Students"];
@@ -189,10 +308,7 @@ namespace LogAppForms
             dataView = new DataView(dt);
             dataView2 = new DataView(dt2);
             dataView3 = new DataView(dt3);
-
-            filter();
         }
-
         private void filter()
         {
             listView1.Items.Clear();
@@ -485,6 +601,93 @@ namespace LogAppForms
             Console.WriteLine(totalDuration);
             return totalDuration;
         }
+        private void SaveAsPDF(string filePath)
+        {
+            PdfDocument document = new PdfDocument();
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont("Arial", 7);
 
+            int x = 10;
+            int y = 10;
+            int cellPadding = 20;
+            int cellHeight = 40;
+
+            int rowCount = listView1.Items.Count;
+            int columnCount = listView1.Columns.Count;
+            int[] columnWidths = new int[columnCount];
+            int tableWidth = 0;
+
+            // Calculate the width of each column
+            for (int i = 0; i < columnCount; i++)
+            {
+                columnWidths[i] = (int)gfx.MeasureString(listView1.Columns[i].Text, font).Width + cellPadding * 2;
+                tableWidth += columnWidths[i];
+            }
+
+            // Draw table header
+            for (int i = 0; i < columnCount; i++)
+            {
+                gfx.DrawRectangle(XPens.Black, x, y, columnWidths[i], cellHeight);
+                gfx.DrawString(listView1.Columns[i].Text, font, XBrushes.Black, new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
+                x += columnWidths[i];
+            }
+
+            y += cellHeight;
+
+            // Draw table rows
+            foreach (ListViewItem item in listView1.Items)
+            {
+                x = 10;
+                int currentColumnCount = item.SubItems.Count; // Get the number of columns for the current row
+
+                for (int i = 0; i < currentColumnCount; i++)
+                {
+                    string cellText = item.SubItems[i].Text;
+                    gfx.DrawRectangle(XPens.Black, x, y, columnWidths[i], cellHeight);
+                    gfx.DrawString(cellText, font, XBrushes.Black, new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
+                    x += columnWidths[i];
+                }
+
+                // Handle extra columns for rows with fewer columns
+                if (currentColumnCount < columnCount)
+                {
+                    int remainingColumns = columnCount - currentColumnCount;
+                    for (int i = 0; i < remainingColumns; i++)
+                    {
+                        gfx.DrawRectangle(XPens.Black, x, y, columnWidths[currentColumnCount + i], cellHeight);
+                        x += columnWidths[currentColumnCount + i];
+                    }
+                }
+
+                y += cellHeight;
+            }
+
+            document.Save(filePath);
+        }
+        public void SaveAsAnalytics(string filePath, Form form)
+        {
+            PdfDocument pdfDocument = new PdfDocument();
+
+            PdfPage pdfPage = pdfDocument.AddPage();
+
+            XGraphics pdfGraphics = XGraphics.FromPdfPage(pdfPage);
+
+            using (Bitmap bitmap = new Bitmap(form.Width, form.Height))
+            {
+                form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+
+                    XImage xImage = XImage.FromStream(ms);
+
+                    pdfGraphics.DrawImage(xImage, 150, 150);
+                }
+            }
+
+            pdfDocument.Save(filePath);
+        }
     }
 }

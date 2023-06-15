@@ -7,14 +7,14 @@
     <framework targetVersion="4.8" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="LogAppForms.exe.manifest" size="5864">
+    <dependentAssembly dependencyType="install" codebase="LogAppForms.exe.manifest" size="8623">
       <assemblyIdentity name="LogAppForms.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="amd64" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>tQ7Ba2FswFyzImMmKvRUW5jkwUS9Y9ghde1mC8UQKZ4=</dsig:DigestValue>
+        <dsig:DigestValue>GRutKRM4SmZicqjrrmkrbZv1K4jLDxFD36a8K9uQ1B8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
