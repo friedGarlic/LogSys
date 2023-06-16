@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LogAppForms
 {
@@ -17,13 +19,14 @@ namespace LogAppForms
         private string timeOut = "Time Out";
         private string Borrow = "Borrow";
         private string Return = "Return";
-        private EntryForm entryForm;
+        private EntryForm entryForm; 
 
         public PurposeForm(EntryForm entryForm)
         {
             InitializeComponent();
             Size = new Size(230, 420);
             this.entryForm = entryForm;
+
         }
         public PurposeForm()
         {
@@ -58,16 +61,18 @@ namespace LogAppForms
                     Close();
 
                 }
-                if (radioButton1.Checked == true)
+                if (toggle_Switch1.Checked || !toggle_Switch1.Checked)
                 {
                     string val = "";
-                    if (userControl11.radioButton1.Checked == true)
+                    if (toggle_Switch1.Checked == true)
                     {
                         val = timeIn;
+                        label2.Text = val;
                     }
-                    if (userControl11.radioButton2.Checked == true)
+                    if (toggle_Switch1.Checked == false)
                     {
                         val = timeOut;
+                        label2.Text = val;
                     }
                     PurposeModel model = new PurposeModel(val);
                     UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
@@ -84,62 +89,69 @@ namespace LogAppForms
             }
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton1.Checked == true)
-            {
-                Size = new Size(462, 420);
-                userControl11.Show();
-                userControl21.Hide();
-                userControl21.radioButton1.Checked = false;
-                userControl21.radioButton2.Checked = false;
-            }
-            if (radioButton2.Checked == true)
-            {
-                Size = new Size(625, 420);
-                userControl11.Hide();
-                userControl21.Show();
-                userControl11.radioButton1.Checked = false;
-                userControl11.radioButton2.Checked = false;
-            }
-        }
-
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton1.Checked == true)
-            {
-                Size = new Size(462, 420);
-                userControl11.Show();
-                userControl21.Hide();
-                userControl21.radioButton1.Checked = false;
-                userControl21.radioButton2.Checked = false;
-            }
             if (radioButton2.Checked == true)
             {
                 Size = new Size(625, 420);
-                userControl11.Hide();
                 userControl21.Show();
-                userControl11.radioButton1.Checked = false;
-                userControl11.radioButton2.Checked = false;
             }
         }
         public bool ValidateForm()
         {
-            if (userControl11.radioButton1.Checked || userControl11.radioButton2.Checked)
+            if (toggle_Switch1.Checked == true || toggle_Switch1.Checked == false)
             {
                 return true;
             }
-
             if (userControl21.numericUpDown1.Value <= 0 || userControl21.comboBox1.Text.Length <= 0)
             {
                 return false;
             }
-
             if (userControl21.radioButton1.Checked || userControl21.radioButton2.Checked)
             {
                 return true;
             }
             return true;
+        }
+
+        private void toggle_Switch1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void InitializeToggleSwitch(string studentID)
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT TOP 1 TimeInOut FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber ORDER BY CurDateTime DESC";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentIdNumber", studentID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string lastTimeInOut = reader.GetString(0);
+                            toggle_Switch1.Checked = (lastTimeInOut == "Time In");
+                            label2.Text = lastTimeInOut;
+                        }
+                        else
+                        {
+                            // No TimeIn/TimeOut records found, default state
+                            toggle_Switch1.Checked = false;
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
+        private void PurposeForm_Load(object sender, EventArgs e)
+        {
+            InitializeToggleSwitch(entryForm.entryIDValue.Text);
         }
     }
 }

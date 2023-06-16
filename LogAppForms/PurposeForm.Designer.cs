@@ -28,28 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.userControl21 = new LogAppForms.UserControl2();
-            this.userControl11 = new LogAppForms.UserControl1();
+            this.toggle_Switch1 = new LogAppForms.Toggle_Switch();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(77, 63);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Purpose";
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(61, 298);
+            this.button1.Location = new System.Drawing.Point(54, 281);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 36);
             this.button1.TabIndex = 3;
@@ -57,24 +46,11 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(41, 169);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(154, 24);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Laboratory Usage";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(41, 228);
+            this.radioButton2.Location = new System.Drawing.Point(30, 232);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(165, 24);
             this.radioButton2.TabIndex = 5;
@@ -91,41 +67,55 @@
             this.userControl21.Size = new System.Drawing.Size(347, 357);
             this.userControl21.TabIndex = 7;
             // 
-            // userControl11
+            // toggle_Switch1
             // 
-            this.userControl11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.userControl11.Location = new System.Drawing.Point(233, 12);
-            this.userControl11.Name = "userControl11";
-            this.userControl11.Size = new System.Drawing.Size(190, 357);
-            this.userControl11.TabIndex = 6;
+            this.toggle_Switch1.Location = new System.Drawing.Point(65, 154);
+            this.toggle_Switch1.MinimumSize = new System.Drawing.Size(45, 22);
+            this.toggle_Switch1.Name = "toggle_Switch1";
+            this.toggle_Switch1.OffBackColor = System.Drawing.Color.Gray;
+            this.toggle_Switch1.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.toggle_Switch1.OnBackColor = System.Drawing.Color.MediumSlateBlue;
+            this.toggle_Switch1.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.toggle_Switch1.Size = new System.Drawing.Size(70, 27);
+            this.toggle_Switch1.TabIndex = 8;
+            this.toggle_Switch1.UseVisualStyleBackColor = true;
+            this.toggle_Switch1.CheckedChanged += new System.EventHandler(this.toggle_Switch1_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(147, 160);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Timed-In";
             // 
             // PurposeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(609, 381);
-            this.Controls.Add(this.userControl11);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.toggle_Switch1);
             this.Controls.Add(this.userControl21);
             this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.Name = "PurposeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PurposeForm";
+            this.Load += new System.EventHandler(this.PurposeForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
-        private UserControl1 userControl11;
         private UserControl2 userControl21;
+        private Toggle_Switch toggle_Switch1;
+        private System.Windows.Forms.Label label2;
     }
 }

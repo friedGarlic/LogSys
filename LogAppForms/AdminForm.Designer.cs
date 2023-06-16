@@ -154,13 +154,13 @@ namespace LogAppForms
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(805, 66);
+            this.chart1.Location = new System.Drawing.Point(805, 75);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Minutes";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(450, 463);
+            this.chart1.Size = new System.Drawing.Size(450, 490);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
             title1.Name = "Title1";
@@ -175,7 +175,7 @@ namespace LogAppForms
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(434, 19);
             this.progressBar1.TabIndex = 1;
-            this.progressBar1.Value = 50;
+            this.progressBar1.Value = 6;
             // 
             // button4
             // 
