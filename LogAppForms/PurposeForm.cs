@@ -19,7 +19,8 @@ namespace LogAppForms
         private string timeOut = "Time Out";
         private string Borrow = "Borrow";
         private string Return = "Return";
-        private EntryForm entryForm; 
+        private EntryForm entryForm;
+        private bool toggleSwitchState = false;
 
         public PurposeForm(EntryForm entryForm)
         {
@@ -37,51 +38,51 @@ namespace LogAppForms
         {
             if (ValidateForm()) 
             {
-                if (radioButton2.Checked == true)
-                {
-                    string val = "";
-                    decimal q = 0;
-                    string cmb = "";
-                    if (userControl21.radioButton1.Checked == true)
+                    if (radioButton2.Checked == true)
                     {
-                        val = Borrow;
-                        q = userControl21.numericUpDown1.Value;
-                        cmb = userControl21.comboBox1.Text;
-                    }
-                    if (userControl21.radioButton2.Checked == true)
-                    {
-                        val = Return;
-                        q = userControl21.numericUpDown1.Value;
-                        cmb = userControl21.comboBox1.Text;
-                    }
-                    PurposeModel model = new PurposeModel(q, val, cmb);
-                    UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-                    GlobalConfig.DataConnections.CreatePurpose(u_model, model);
-                    MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
-                    Close();
+                        string val = "";
+                        decimal q = 0;
+                        string cmb = "";
+                        if (userControl21.radioButton1.Checked == true)
+                        {
+                            val = Borrow;
+                            q = userControl21.numericUpDown1.Value;
+                            cmb = userControl21.comboBox1.Text;
+                        }
+                        if (userControl21.radioButton2.Checked == true)
+                        {
+                            val = Return;
+                            q = userControl21.numericUpDown1.Value;
+                            cmb = userControl21.comboBox1.Text;
+                        }
+                        PurposeModel model = new PurposeModel(q, val, cmb);
+                        UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+                        GlobalConfig.DataConnections.CreatePurpose(u_model, model);
+                        MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
+                        Close();
 
-                }
-                if (toggle_Switch1.Checked || !toggle_Switch1.Checked)
-                {
-                    string val = "";
-                    if (toggle_Switch1.Checked == true)
-                    {
-                        val = timeIn;
-                        label2.Text = val;
                     }
-                    if (toggle_Switch1.Checked == false)
+                    if (toggle_Switch1.Checked || !toggle_Switch1.Checked)
                     {
-                        val = timeOut;
-                        label2.Text = val;
+                        string val = "";
+                        if (toggle_Switch1.Checked == true)
+                        {
+                            val = timeIn;
+                            label2.Text = val;
+                        }
+                        if (toggle_Switch1.Checked == false)
+                        {
+                            val = timeOut;
+                            label2.Text = val;
+                        }
+                        PurposeModel model = new PurposeModel(val);
+                        UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+
+                        GlobalConfig.DataConnections.CurrentTime(u_model, model);
+                        MessageBox.Show("Success, Mind the other students!");
+
+                        Close();
                     }
-                    PurposeModel model = new PurposeModel(val);
-                    UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-
-                    GlobalConfig.DataConnections.CurrentTime(u_model, model);
-                    MessageBox.Show("Success, Mind the other students!");
-
-                    Close();
-                }
             }
             else
             {
@@ -99,24 +100,35 @@ namespace LogAppForms
         }
         public bool ValidateForm()
         {
-            if (toggle_Switch1.Checked == true || toggle_Switch1.Checked == false)
+            if(toggle_Switch1.Checked == true && radioButton2.Checked == true)
             {
-                return true;
+                MessageBox.Show("You're already Timed In and trying to borrow/return Items");
+                return false;
             }
             if (userControl21.numericUpDown1.Value <= 0 || userControl21.comboBox1.Text.Length <= 0)
             {
+                if (toggleSwitchState == false)
+                {
+                    return false;
+                }
+                if (toggleSwitchState == true)
+                {
+                    return true;
+                }
                 return false;
             }
             if (userControl21.radioButton1.Checked || userControl21.radioButton2.Checked)
             {
                 return true;
             }
+            
             return true;
         }
 
         private void toggle_Switch1_CheckedChanged(object sender, EventArgs e)
         {
-
+            //return flag as default cause of auto change
+            toggleSwitchState = false;
         }
         private void InitializeToggleSwitch(string studentID)
         {
@@ -139,7 +151,7 @@ namespace LogAppForms
                         }
                         else
                         {
-                            // No TimeIn/TimeOut records found, default state
+                            //for togglestate
                             toggle_Switch1.Checked = false;
                         }
                     }
@@ -152,6 +164,11 @@ namespace LogAppForms
         private void PurposeForm_Load(object sender, EventArgs e)
         {
             InitializeToggleSwitch(entryForm.entryIDValue.Text);
+        }
+
+        private void toggle_Switch1_MouseClick(object sender, MouseEventArgs e)
+        {
+            toggleSwitchState = true;
         }
     }
 }

@@ -15,6 +15,9 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System.Drawing.Imaging;
 using System.IO;
+using Tulpep.NotificationWindow;
+using System.Runtime.InteropServices;
+using System.Drawing.Drawing2D;
 
 namespace LogAppForms
 {
@@ -28,8 +31,9 @@ namespace LogAppForms
         private DataView dataView,dataView2, dataView3;
         private PrintDocument printDocument;
 
-        bool drag = false;
-        Point start_point = new Point(0, 0);
+        private bool drag = false;
+        private Point start_point = new Point(0, 0);
+        private RoundedPanel roundedPanel;
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -54,61 +58,15 @@ namespace LogAppForms
 
         private void AdminForm_Load(object sender, EventArgs e)
         {
+            OpenConnectionFilter();
             LoadChart();
             LoadPieChart();
-            OpenConnectionFilter();
-            HashSet<string> uniqueItems = new HashSet<string>();//stores address
-
-            foreach (DataRow dr3 in dataView3.ToTable().Rows)
-            {
-                foreach (DataRow dr in dataView2.ToTable().Rows)
-                {
-                    string studentIdNumber = dr[1].ToString(); //store the value of what column StudentIdNumber of each row on above 'foreach'
-                    DataRow[] relatedRows = dataView.ToTable().Select($"StudentId = '{studentIdNumber}'"); //combine StudentID and StudentIdNumber of 2 different table with the same value
-
-                    foreach (DataRow dr2 in relatedRows)
-                    {
-                        string itemText = $"{dr[1]} {dr[2]}";
-
-                        if (dr[3].ToString().Contains("Borrow") || dr[3].ToString().Contains("Return"))
-                        {
-                            if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
-                            {
-                                listView1.Items.Add(new ListViewItem(new string[]
-                                {
-                                    dr[1].ToString(),
-                                    dr[2].ToString(),
-                                    dr[3].ToString(),
-                                    dr2[3].ToString(),
-                                    dr2[4].ToString(),
-                                    dr2[5].ToString(),
-                                    dr[4].ToString(),
-                                    dr[5].ToString()
-                                }));
-
-                                uniqueItems.Add(itemText); // add to array if unique
-                            }
-                        }
-                        else
-                        {
-                            if (!uniqueItems.Contains(itemText)) //check if theres unique adress in that item if not unique it wont do anything
-                            {
-                                listView1.Items.Add(new ListViewItem(new string[]
-                                {
-                                    dr[1].ToString(),
-                                    dr[2].ToString(),
-                                    dr[3].ToString(),
-                                    dr2[3].ToString(),
-                                    dr2[4].ToString(),
-                                    dr2[5].ToString()
-                                }));
-
-                                uniqueItems.Add(itemText); // add to array if unique
-                            }
-                        }
-                    }
-                }
-            }
+            filter();
+            PopulateListView();
+            NotifWnd();
+            roundedPanel = new RoundedPanel();
+            roundedPanel.Location = new Point(10, 10); // Set the desired location
+            roundedPanel.Size = new Size(200, 200);
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -141,10 +99,6 @@ namespace LogAppForms
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            PrintListView();
-        }
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -252,6 +206,32 @@ namespace LogAppForms
                 connection.Close();
             }
         }
+        private void LoadChartByDate()
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT DISTINCT StudentIdNumber FROM DateTimeTable";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string studentId = reader.GetString(0); // Assuming StudentIdNumber is of type VARCHAR
+
+                            UserModel model = new UserModel(studentId);
+                            TimeSpan totalDuration = GetTotalDurationByDate(dateTimePicker1.Value,dateTimePicker2.Value,model);
+
+                            chart1.Series["Minutes"].Points.AddXY(studentId, totalDuration.Minutes);
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
         private void LoadPieChart()
         {
             using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
@@ -297,12 +277,44 @@ namespace LogAppForms
                 UserModel model = new UserModel(textBox1.Text);
                 TimeSpan totalDuration = GetTotalDuration(model);
 
-                chart1.Series["Hours"].Points.AddXY(textBox1.Text, totalDuration.Minutes);
+                chart1.Series["Minutes"].Points.AddXY(textBox1.Text, totalDuration.Minutes);
             }
             OpenConnectionFilter();
 
 
             filter();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            listView2.Items.Clear(); 
+            foreach (var series in chart2.Series)
+            {
+                series.Points.Clear();
+            }
+            PopulateListView();
+            LoadPieChart();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            AddItem addItem = new AddItem();
+            addItem.Show();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            foreach (var series in chart1.Series)
+            {
+                series.Points.Clear();
+            }
+            LoadChartByDate();
+            OpenConnectionFilter();
+            FilterListView();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            PrintListView();
         }
         private void OpenConnectionFilter()
         {
@@ -507,14 +519,47 @@ namespace LogAppForms
                 }
             }
         }
+        private void FilterListView()
+        {
+            DateTime startDate = dateTimePicker1.Value.Date;
+            DateTime endDate = dateTimePicker2.Value.Date;
+            listView1.Items.Clear();
+            HashSet<string> uniqueItems = new HashSet<string>();
 
+            foreach (DataRow dr3 in dataView3.ToTable().Rows)
+            {
+                foreach (DataRow dr in dataView2.ToTable().Rows)
+                {
+                    foreach (DataRow dr2 in dataView.ToTable().Rows)
+                    {
+                        // Apply your filtering logic here
+                        DateTime itemDate = dr.Field<DateTime>("CurDateTime");
+                        string itemText = $"{dr[1]} {dr[2]}";
+
+                        if (itemDate.Date >= startDate && itemDate.Date <= endDate && !uniqueItems.Contains(itemText))
+                        {
+                            // Add the item to the ListView
+                            listView1.Items.Add(new ListViewItem(new string[]
+                            {
+                                dr[1].ToString(),
+                                dr[2].ToString(),
+                                dr[3].ToString(),
+                                dr2[3].ToString(),
+                                dr2[4].ToString(),
+                                dr2[5].ToString(),
+                                dr[4].ToString(),
+                                dr[5].ToString()
+                            }));
+
+                            uniqueItems.Add(itemText);
+                        }
+                    }
+                }
+            }
+        }
         //inventory ---------------------------------------------------
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            listView2.Items.Clear();
-            PopulateListView();
-        }
+
         private void PopulateListView()
         {
             try
@@ -542,15 +587,9 @@ namespace LogAppForms
                                     {
                                         dr[1].ToString(),
                                         dr[2].ToString()
-                                    })) ;
+                                    }));
             }
         }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            AddItem addItem = new AddItem();
-            addItem.Show();
-        }
-
         public UserModel GetTimeDate(UserModel userModel)
         {
             using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
@@ -622,7 +661,6 @@ namespace LogAppForms
                 connection.Close();
             }
 
-            Console.WriteLine(totalDuration);
             return totalDuration;
         }
         private void SaveAsPDF(string filePath)
@@ -700,6 +738,104 @@ namespace LogAppForms
 
             document.Save(filePath);
             document.Close();
+        }
+        private void NotifWnd()
+        {
+            popupNotifier1.TitleText = "Click to Enter Security Window";
+            popupNotifier1.ContentText = "There are many undesired instances that happened!";
+            popupNotifier1.Click += Popup_Clicked;
+            popupNotifier1.Popup();
+        }
+        private void Popup_Clicked(object sender, EventArgs e)
+        {
+            Security security = new Security();
+            security.Show();
+        }
+        /*private void LoadDateData(DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT * FROM DateTimeTable WHERE CurDateTime >= @StartDate AND CurDateTime <= @EndDate ORDER BY CurDateTime";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@StartDate", startDate);
+                    command.Parameters.AddWithValue("@EndDate", endDate);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        foreach (var series in chart1.Series)
+                        {
+                            series.Points.Clear();
+                        }
+                        while (reader.Read())
+                        {
+                            string studentId = reader.GetString(1);
+
+                            UserModel model = new UserModel(studentId);
+                            TimeSpan totalDuration = GetTotalDuration(model);
+
+                            chart1.Series["Minutes"].Points.AddXY(studentId, totalDuration.Minutes);
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }*/
+        private TimeSpan GetTotalDurationByDate(DateTime startDatePicker, DateTime endDatePicker, UserModel userModel)
+        {
+            DateTime startDate = startDatePicker;
+            DateTime endDate = endDatePicker;
+
+            TimeSpan totalDuration = TimeSpan.Zero;
+            DateTime? previousDateTime = null;
+            bool isInsideTimeRange = false;
+
+            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT CurDateTime, TimeInOut FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber ORDER BY CurDateTime";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentIdNumber", userModel.student_ID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime currentDateTime = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
+                            string eventType = reader.GetString(1); // Assuming TimeInOut is of type VARCHAR
+
+                            if (currentDateTime >= startDate && currentDateTime <= endDate)
+                            {
+                                if (eventType == "Time In")
+                                {
+                                    if (!isInsideTimeRange)
+                                    {
+                                        previousDateTime = currentDateTime;
+                                        isInsideTimeRange = true;
+                                    }
+                                }
+                                else if (eventType == "Time Out")
+                                {
+                                    if (isInsideTimeRange && previousDateTime.HasValue)
+                                    {
+                                        TimeSpan duration = currentDateTime - previousDateTime.Value;
+                                        totalDuration += duration;
+                                        isInsideTimeRange = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+
+            return totalDuration;
         }
     }
 }

@@ -60,12 +60,8 @@ namespace LogAppForms
 
             GlobalConfig.DataConnections.CreateUser(user);
             MessageBox.Show("Registered Successfuly");
+            this.Close();
 
-        }
-        private bool IsStudentIdDuplicate(UserModel user)
-        {
-            user = new UserModel(studentID_value.Text);
-            return GlobalConfig.DataConnections.IsStudentIdDuplicate(user);
         }
         public bool validateForm()
         {

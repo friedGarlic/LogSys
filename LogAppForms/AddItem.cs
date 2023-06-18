@@ -26,6 +26,8 @@ namespace LogAppForms
                             );
             GlobalConfig.DataConnections.CreateItem(item);
             MessageBox.Show("Added Successfuly");
+
+            this.Close();
         }
         private void button1_Click(object sender, EventArgs e)
         {

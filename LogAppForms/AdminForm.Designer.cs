@@ -41,6 +41,8 @@ namespace LogAppForms
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -56,10 +58,21 @@ namespace LogAppForms
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.Inventory = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.roundedPanel3 = new LogAppForms.RoundedPanel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.roundedPanel2 = new LogAppForms.RoundedPanel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.roundedPanel1 = new LogAppForms.RoundedPanel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,10 +93,18 @@ namespace LogAppForms
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.popupNotifier1 = new Tulpep.NotificationWindow.PopupNotifier();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.Inventory.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.roundedPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.roundedPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.roundedPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -94,7 +115,7 @@ namespace LogAppForms
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.Inventory);
-            this.tabControl1.Location = new System.Drawing.Point(0, 73);
+            this.tabControl1.Location = new System.Drawing.Point(0, 92);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1271, 591);
@@ -102,6 +123,8 @@ namespace LogAppForms
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.dateTimePicker2);
+            this.tabPage1.Controls.Add(this.dateTimePicker1);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.button8);
             this.tabPage1.Controls.Add(this.chart1);
@@ -109,8 +132,6 @@ namespace LogAppForms
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.listView1);
-            this.tabPage1.Controls.Add(this.comboBox1);
-            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.textBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -119,6 +140,24 @@ namespace LogAppForms
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Entry History";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            this.dateTimePicker2.Location = new System.Drawing.Point(1179, 24);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(76, 20);
+            this.dateTimePicker2.TabIndex = 10;
+            this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(1025, 24);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(77, 20);
+            this.dateTimePicker1.TabIndex = 9;
             // 
             // label5
             // 
@@ -270,25 +309,6 @@ namespace LogAppForms
             this.columnHeader4.Text = "Quantity";
             this.columnHeader4.Width = 80;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(1124, 16);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 28);
-            this.comboBox1.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(1065, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 16);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Sort By:";
-            // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -300,6 +320,7 @@ namespace LogAppForms
             // 
             // Inventory
             // 
+            this.Inventory.Controls.Add(this.panel2);
             this.Inventory.Controls.Add(this.chart2);
             this.Inventory.Controls.Add(this.listView2);
             this.Inventory.Controls.Add(this.button5);
@@ -315,20 +336,152 @@ namespace LogAppForms
             this.Inventory.Text = "Equipment Inventory";
             this.Inventory.UseVisualStyleBackColor = true;
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel2.Controls.Add(this.roundedPanel3);
+            this.panel2.Controls.Add(this.roundedPanel2);
+            this.panel2.Controls.Add(this.roundedPanel1);
+            this.panel2.Location = new System.Drawing.Point(796, 47);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(461, 112);
+            this.panel2.TabIndex = 9;
+            // 
+            // roundedPanel3
+            // 
+            this.roundedPanel3.BackColor = System.Drawing.Color.SpringGreen;
+            this.roundedPanel3.Controls.Add(this.pictureBox5);
+            this.roundedPanel3.Controls.Add(this.label10);
+            this.roundedPanel3.Controls.Add(this.label11);
+            this.roundedPanel3.Location = new System.Drawing.Point(328, 3);
+            this.roundedPanel3.Name = "roundedPanel3";
+            this.roundedPanel3.Size = new System.Drawing.Size(130, 106);
+            this.roundedPanel3.TabIndex = 12;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox5.BackgroundImage")));
+            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox5.Location = new System.Drawing.Point(18, 3);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox5.TabIndex = 13;
+            this.pictureBox5.TabStop = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(69, 16);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 12);
+            this.label10.TabIndex = 10;
+            this.label10.Text = "Condition";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Arial Rounded MT Bold", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(11, 60);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(116, 37);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "GOOD";
+            // 
+            // roundedPanel2
+            // 
+            this.roundedPanel2.BackColor = System.Drawing.Color.Silver;
+            this.roundedPanel2.Controls.Add(this.pictureBox4);
+            this.roundedPanel2.Controls.Add(this.label8);
+            this.roundedPanel2.Controls.Add(this.label9);
+            this.roundedPanel2.Location = new System.Drawing.Point(180, 3);
+            this.roundedPanel2.Name = "roundedPanel2";
+            this.roundedPanel2.Size = new System.Drawing.Size(130, 106);
+            this.roundedPanel2.TabIndex = 11;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(12, 3);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox4.TabIndex = 12;
+            this.pictureBox4.TabStop = false;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(49, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(78, 12);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Overall Items";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(45, 45);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(82, 55);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "24\r\n";
+            // 
+            // roundedPanel1
+            // 
+            this.roundedPanel1.BackColor = System.Drawing.Color.SkyBlue;
+            this.roundedPanel1.Controls.Add(this.pictureBox3);
+            this.roundedPanel1.Controls.Add(this.label7);
+            this.roundedPanel1.Controls.Add(this.label6);
+            this.roundedPanel1.Location = new System.Drawing.Point(3, 3);
+            this.roundedPanel1.Name = "roundedPanel1";
+            this.roundedPanel1.Size = new System.Drawing.Size(146, 106);
+            this.roundedPanel1.TabIndex = 0;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(4, 3);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox3.TabIndex = 11;
+            this.pictureBox3.TabStop = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(41, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(102, 12);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Unreturned Items";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(61, 45);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(82, 55);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "24\r\n";
+            // 
             // chart2
             // 
             chartArea2.Name = "ChartArea1";
             this.chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(831, 47);
+            this.chart2.Location = new System.Drawing.Point(796, 153);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
             series2.Legend = "Legend1";
             series2.Name = "NumberOfItems";
             this.chart2.Series.Add(series2);
-            this.chart2.Size = new System.Drawing.Size(424, 486);
+            this.chart2.Size = new System.Drawing.Size(459, 376);
             this.chart2.TabIndex = 8;
             this.chart2.Text = "chart2";
             title2.Name = "Items";
@@ -528,11 +681,30 @@ namespace LogAppForms
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // popupNotifier1
+            // 
+            this.popupNotifier1.BodyColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.popupNotifier1.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.popupNotifier1.ButtonBorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.popupNotifier1.ButtonHoverColor = System.Drawing.Color.Red;
+            this.popupNotifier1.ContentColor = System.Drawing.Color.White;
+            this.popupNotifier1.ContentFont = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.popupNotifier1.ContentHoverColor = System.Drawing.Color.Red;
+            this.popupNotifier1.ContentText = null;
+            this.popupNotifier1.GradientPower = 0;
+            this.popupNotifier1.Image = ((System.Drawing.Image)(resources.GetObject("popupNotifier1.Image")));
+            this.popupNotifier1.ImageSize = new System.Drawing.Size(100, 100);
+            this.popupNotifier1.IsRightToLeft = false;
+            this.popupNotifier1.OptionsMenu = null;
+            this.popupNotifier1.Size = new System.Drawing.Size(400, 100);
+            this.popupNotifier1.TitleFont = new System.Drawing.Font("Segoe UI", 9F);
+            this.popupNotifier1.TitleText = null;
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1271, 667);
+            this.ClientSize = new System.Drawing.Size(1271, 685);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -548,6 +720,16 @@ namespace LogAppForms
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.Inventory.ResumeLayout(false);
             this.Inventory.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.roundedPanel3.ResumeLayout(false);
+            this.roundedPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.roundedPanel2.ResumeLayout(false);
+            this.roundedPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.roundedPanel1.ResumeLayout(false);
+            this.roundedPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -563,8 +745,6 @@ namespace LogAppForms
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage Inventory;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader studentID_column;
         private System.Windows.Forms.ColumnHeader age_column;
@@ -600,5 +780,21 @@ namespace LogAppForms
         private SaveFileDialog saveFileDialog1;
         private Label label5;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private Tulpep.NotificationWindow.PopupNotifier popupNotifier1;
+        private Panel panel2;
+        private Label label6;
+        private Label label7;
+        private RoundedPanel roundedPanel1;
+        private RoundedPanel roundedPanel2;
+        private Label label8;
+        private Label label9;
+        private RoundedPanel roundedPanel3;
+        private Label label10;
+        private Label label11;
+        private PictureBox pictureBox3;
+        private PictureBox pictureBox5;
+        private PictureBox pictureBox4;
+        private DateTimePicker dateTimePicker2;
+        private DateTimePicker dateTimePicker1;
     }
 }
