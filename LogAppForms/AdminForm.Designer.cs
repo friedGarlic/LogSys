@@ -41,6 +41,8 @@ namespace LogAppForms
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
@@ -118,11 +120,13 @@ namespace LogAppForms
             this.tabControl1.Location = new System.Drawing.Point(0, 92);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1271, 591);
+            this.tabControl1.Size = new System.Drawing.Size(1271, 603);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label12);
+            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.dateTimePicker2);
             this.tabPage1.Controls.Add(this.dateTimePicker1);
             this.tabPage1.Controls.Add(this.label5);
@@ -136,17 +140,35 @@ namespace LogAppForms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1263, 565);
+            this.tabPage1.Size = new System.Drawing.Size(1263, 577);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Entry History";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(1187, 8);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(68, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "END DATE :";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(994, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(108, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "SORT START DATE";
+            // 
             // dateTimePicker2
             // 
             this.dateTimePicker2.CustomFormat = "yyyy-MM-dd HH:mm:ss";
-            this.dateTimePicker2.Location = new System.Drawing.Point(1179, 24);
+            this.dateTimePicker2.Location = new System.Drawing.Point(1190, 24);
             this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(76, 20);
+            this.dateTimePicker2.Size = new System.Drawing.Size(65, 20);
             this.dateTimePicker2.TabIndex = 10;
             this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
@@ -154,15 +176,15 @@ namespace LogAppForms
             // 
             this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(1025, 24);
+            this.dateTimePicker1.Location = new System.Drawing.Point(997, 24);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(77, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(105, 20);
             this.dateTimePicker1.TabIndex = 9;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(808, 29);
+            this.label5.Location = new System.Drawing.Point(793, 31);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(92, 13);
             this.label5.TabIndex = 8;
@@ -193,7 +215,7 @@ namespace LogAppForms
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(805, 75);
+            this.chart1.Location = new System.Drawing.Point(796, 75);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
@@ -203,16 +225,16 @@ namespace LogAppForms
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
             title1.Name = "Title1";
-            title1.Text = "Number of Hours";
+            title1.Text = "Number of Minutes";
             this.chart1.Titles.Add(title1);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(811, 50);
+            this.progressBar1.Location = new System.Drawing.Point(796, 50);
             this.progressBar1.MarqueeAnimationSpeed = 50;
             this.progressBar1.Maximum = 200;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(434, 19);
+            this.progressBar1.Size = new System.Drawing.Size(464, 19);
             this.progressBar1.TabIndex = 1;
             this.progressBar1.Value = 6;
             // 
@@ -331,7 +353,7 @@ namespace LogAppForms
             this.Inventory.Location = new System.Drawing.Point(4, 22);
             this.Inventory.Name = "Inventory";
             this.Inventory.Padding = new System.Windows.Forms.Padding(3);
-            this.Inventory.Size = new System.Drawing.Size(1263, 565);
+            this.Inventory.Size = new System.Drawing.Size(1263, 577);
             this.Inventory.TabIndex = 1;
             this.Inventory.Text = "Equipment Inventory";
             this.Inventory.UseVisualStyleBackColor = true;
@@ -704,7 +726,7 @@ namespace LogAppForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1271, 685);
+            this.ClientSize = new System.Drawing.Size(1271, 703);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -796,5 +818,7 @@ namespace LogAppForms
         private PictureBox pictureBox4;
         private DateTimePicker dateTimePicker2;
         private DateTimePicker dateTimePicker1;
+        private Label label12;
+        private Label label1;
     }
 }

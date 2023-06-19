@@ -25,7 +25,7 @@ namespace LogAppForms
         public PurposeForm(EntryForm entryForm)
         {
             InitializeComponent();
-            Size = new Size(230, 420);
+            Size = new Size(207, 445);
             this.entryForm = entryForm;
 
         }
@@ -38,7 +38,7 @@ namespace LogAppForms
         {
             if (ValidateForm()) 
             {
-                    if (radioButton2.Checked == true)
+                    if (toggle_Switch2.Checked == true)
                     {
                         string val = "";
                         decimal q = 0;
@@ -90,19 +90,11 @@ namespace LogAppForms
             }
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton2.Checked == true)
-            {
-                Size = new Size(625, 420);
-                userControl21.Show();
-            }
-        }
         public bool ValidateForm()
         {
-            if(toggle_Switch1.Checked == true && radioButton2.Checked == true)
+            if(toggle_Switch1.Checked == true && toggle_Switch2.Checked == true)
             {
-                MessageBox.Show("You're already Timed In and trying to borrow/return Items");
+                MessageBox.Show("You're already Timed In and trying to borrow/return Items, Time Out first!!");
                 return false;
             }
             if (userControl21.numericUpDown1.Value <= 0 || userControl21.comboBox1.Text.Length <= 0)
@@ -169,6 +161,20 @@ namespace LogAppForms
         private void toggle_Switch1_MouseClick(object sender, MouseEventArgs e)
         {
             toggleSwitchState = true;
+        }
+
+        private void toggle_Switch2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toggle_Switch2.Checked == true)
+            {
+                Size = new Size(566, 445);
+                userControl21.Show();
+            }
+            if (toggle_Switch2.Checked == false)
+            {
+                Size = new Size(207, 445);
+                userControl21.Show();
+            }
         }
     }
 }

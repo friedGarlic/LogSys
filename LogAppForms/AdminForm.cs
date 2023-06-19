@@ -316,6 +316,7 @@ namespace LogAppForms
         {
             PrintListView();
         }
+
         private void OpenConnectionFilter()
         {
             _conn.Open();
@@ -532,13 +533,13 @@ namespace LogAppForms
                 {
                     foreach (DataRow dr2 in dataView.ToTable().Rows)
                     {
-                        // Apply your filtering logic here
+                        //filtering logic here
                         DateTime itemDate = dr.Field<DateTime>("CurDateTime");
                         string itemText = $"{dr[1]} {dr[2]}";
 
                         if (itemDate.Date >= startDate && itemDate.Date <= endDate && !uniqueItems.Contains(itemText))
                         {
-                            // Add the item to the ListView
+                            // add item to the listview
                             listView1.Items.Add(new ListViewItem(new string[]
                             {
                                 dr[1].ToString(),
