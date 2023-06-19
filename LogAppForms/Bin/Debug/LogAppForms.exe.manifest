@@ -66,26 +66,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="798168">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="800216">
       <assemblyIdentity name="LogAppForms" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>4DdbmWCcqQ4xMTwd8P4acgGhUIb7mYP8koUvdGfofD4=</dsig:DigestValue>
+        <dsig:DigestValue>jNsGTGI0WB1ALhp1b8xC1vqc+VCgG37hjL8NKlc7WMc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppLibrary.dll" size="13312">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppLibrary.dll" size="13824">
       <assemblyIdentity name="LogAppLibrary" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>GfY4QS64fGc/gUAUopBJjH1NWYprsJAS4RVOHudQ1NY=</dsig:DigestValue>
+        <dsig:DigestValue>cDZ5+RHnyQb/rDVYZEwmNpWZ4I+LJhobQaezyOJu7lA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

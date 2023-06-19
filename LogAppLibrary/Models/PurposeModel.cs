@@ -7,7 +7,8 @@ namespace LogAppLibrary
     {
         public string timeInOut { get; set; }
         public int Quantity { get; set; }
-        public string BorrowReturn { get; set; }
+        public string Borrow { get; set; }
+        public string Return { get; set; }
         public string ItemName { get; set; }
 
         public PurposeModel() { }
@@ -20,6 +21,11 @@ namespace LogAppLibrary
             Quantity = Convert.ToInt32(quantity);
             timeInOut = Time_InOut;
             ItemName = item_name;
+        }
+        public PurposeModel(string borrow, string return_)
+        {
+            Borrow = borrow;
+            Return = return_;
         }
     }
 }

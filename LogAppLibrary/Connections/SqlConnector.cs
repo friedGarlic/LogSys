@@ -138,7 +138,6 @@ namespace LogAppLibrary
                 return count > 0;
             }
         }
-
         public bool IsStudentIdDuplicate(UserModel user_model) // when trying to register, yet already registered
         {
             using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))

@@ -51,5 +51,19 @@ namespace LogAppForms
             Region = new Region(path);
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PurposeForm purposeForm = new PurposeForm();
+            if (!purposeForm.IsItemAvailable(comboBox1.Text))
+            {
+                label4.Text = "Not Available";
+                label4.ForeColor = Color.Red;
+            }
+            else
+            {
+                label4.Text = "Available";
+                label4.ForeColor = Color.Green;
+            }
+        }
     }
 }

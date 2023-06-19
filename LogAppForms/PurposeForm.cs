@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +16,13 @@ namespace LogAppForms
 {
     public partial class PurposeForm : Form
     {
+        private SqlConnection _conn = new SqlConnection(GlobalConfig.ConnectString("SearchCN"));
+        private SqlCommand cmd;
+        private DataTable dt;
+        private SqlDataAdapter adapter;
+        private DataSet ds;
+        private DataView dataView;
+
         private string timeIn = "Time In";
         private string timeOut = "Time Out";
         private string Borrow = "Borrow";
@@ -48,21 +56,45 @@ namespace LogAppForms
                             val = Borrow;
                             q = userControl21.numericUpDown1.Value;
                             cmb = userControl21.comboBox1.Text;
+                            if (IsItemAvailable(cmb))
+                            {
+                                PurposeModel model = new PurposeModel(q, val, cmb);
+                                UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+
+                                RemoveQuantity();
+                                GlobalConfig.DataConnections.CreatePurpose(u_model, model);
+                                MessageBox.Show("Success, Please return the borrowed Item!");
+                                Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Item is not available!!");
+                            }
                         }
+
                         if (userControl21.radioButton2.Checked == true)
                         {
-                            val = Return;
-                            q = userControl21.numericUpDown1.Value;
-                            cmb = userControl21.comboBox1.Text;
-                        }
-                        PurposeModel model = new PurposeModel(q, val, cmb);
-                        UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
-                        GlobalConfig.DataConnections.CreatePurpose(u_model, model);
-                        MessageBox.Show("Success, Thank you for Borrowing/Returning the Item!");
-                        Close();
+                            if (!CheckPreviousPurpose(entryForm.entryIDValue.Text)) // if theres a borrow string in purpose, then you can return otherwise, stop user
+                            {
+                                val = Return;
+                                q = userControl21.numericUpDown1.Value;
+                                cmb = userControl21.comboBox1.Text;
 
+                                PurposeModel model = new PurposeModel(q, val, cmb);
+                                UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+
+                                AddQuantity();
+                                GlobalConfig.DataConnections.CreatePurpose(u_model, model);
+                                MessageBox.Show("Success, Thank you for Returning the Item!");
+                                Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("You Didnt Borrow any items!!, Please check the administrator");
+                            }
+                        }
                     }
-                    if (toggle_Switch1.Checked || !toggle_Switch1.Checked)
+                    if (toggle_Switch1.Checked == true)
                     {
                         string val = "";
                         if (toggle_Switch1.Checked == true)
@@ -175,6 +207,102 @@ namespace LogAppForms
                 Size = new Size(207, 445);
                 userControl21.Show();
             }
+        }
+
+        private void RemoveQuantity()
+        {
+            ItemModel item = new ItemModel(
+                            userControl21.comboBox1.Text,
+                            userControl21.numericUpDown1.Value
+                        );
+
+            GlobalConfig.DataConnections.RemoveItem(item);
+        }
+        private void AddQuantity()
+        {
+            ItemModel item = new ItemModel(
+                            userControl21.comboBox1.Text,
+                            userControl21.numericUpDown1.Value
+                        );
+
+            GlobalConfig.DataConnections.AddQuantityItem(item);
+        }
+        private bool CheckPreviousPurpose(string studentID)
+        {
+            string previousTimeInOut = null;
+            string previousStudentIdNumber = null; 
+            bool foundString= false;
+            DataTable dataTable = GetDateTimeTable();
+            dataTable.DefaultView.Sort = "TimeInOut DESC";
+
+            foreach (DataRowView rowView in dataTable.DefaultView)
+            {
+                DataRow row = rowView.Row;
+
+                string currentTimeInOut = row["TimeInOut"].ToString();
+                string currentStudentIdNumber = row["StudentIdNumber"].ToString();
+
+                if (currentStudentIdNumber == studentID && previousTimeInOut == "Return")
+                {
+                    // Do something if the previous "TimeInOut" was "Borrow" for the same "StudentIdNumber"
+                    // For example: 
+                    foundString = true; // Set the flag to true
+                    break;
+                }
+
+                previousTimeInOut = currentTimeInOut;
+                previousStudentIdNumber = currentStudentIdNumber;
+            }
+            return foundString;
+        }
+        private DataTable GetDateTimeTable() //On table DateTimeTable
+        {
+            _conn.Open();
+            cmd = new SqlCommand("SELECT * FROM DateTimeTable", _conn);
+
+            adapter = new SqlDataAdapter(cmd);
+
+            ds = new DataSet();
+
+            adapter.Fill(ds, "dbo.DateTimeTable");
+
+            _conn.Close();
+
+            dt = ds.Tables["dbo.DateTimeTable"];
+
+            return dt;
+        }
+        private DataTable GetItemsTable() // returns Items table
+        {
+            _conn.Open();
+            cmd = new SqlCommand("SELECT * FROM Items", _conn);
+
+            adapter = new SqlDataAdapter(cmd);
+
+            ds = new DataSet();
+
+            adapter.Fill(ds, "dbo.Items");
+
+            _conn.Close();
+
+            dt = ds.Tables["dbo.Items"];
+
+            return dt;
+        }
+        public bool IsItemAvailable(string itemName)
+        {
+            bool avail = false;
+            foreach (DataRow row in GetItemsTable().Rows)
+            {
+                string tableItemName = row["ItemName"].ToString();
+                int quantity = Convert.ToInt32(row["Quantity"]);
+
+                if (quantity > 0 && tableItemName == itemName)
+                {
+                    avail = true;
+                }
+            }
+            return avail;
         }
     }
 }

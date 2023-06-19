@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.userControl21 = new LogAppForms.UserControl2();
             this.toggle_Switch1 = new LogAppForms.Toggle_Switch();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toggle_Switch2 = new LogAppForms.Toggle_Switch();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -134,5 +136,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private Toggle_Switch toggle_Switch2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

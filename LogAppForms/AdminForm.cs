@@ -12,12 +12,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
-using System.Drawing.Imaging;
-using System.IO;
-using Tulpep.NotificationWindow;
-using System.Runtime.InteropServices;
-using System.Drawing.Drawing2D;
 
 namespace LogAppForms
 {
@@ -838,5 +832,6 @@ namespace LogAppForms
 
             return totalDuration;
         }
+
     }
 }
