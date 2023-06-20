@@ -152,23 +152,30 @@ namespace LogAppLibrary
             }
         }
 
-        public void GetDuration()
+        public void AddUnreturnedItem(string name, decimal q)
         {
-            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
             {
-                connection.Open();
+                var p = new DynamicParameters();
+                p.Add("@ItemName", name);
+                p.Add("@Quantity", q);
 
-                string sqlQuery = "SELECT CurDateTime FROM DateTimeTable WHERE StudentIdNumber = @StudentIdNumber";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
+                dbConnection.Execute("dbo.spAddUnreturnedItems", p, commandType: CommandType.StoredProcedure);
 
-                    DateTime dateTimeValue = (DateTime)command.ExecuteScalar();
-
-                    Console.WriteLine("DateTime Value: " + dateTimeValue);
-                }
-
-                connection.Close();
             }
         }
+        public void SubUnreturnedItem(string name, decimal q)
+        {
+            using (IDbConnection dbConnection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectString("StudentsDB")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ItemName", name);
+                p.Add("@Quantity", q);
+
+                dbConnection.Execute("dbo.spSubUnreturnedItems", p, commandType: CommandType.StoredProcedure);
+
+            }
+        }
+
     }
 }

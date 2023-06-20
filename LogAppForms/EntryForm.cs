@@ -18,28 +18,27 @@ namespace LogAppForms
 
         private void LogIn()
         {
-            UserModel model = new UserModel(entryIDValue.Text);
+            UserModel model = new UserModel(entryIDValue.textBox1.Text);
 
             GlobalConfig.DataConnections.CurrentTime(model);
             PurposeForm purposeForm = new PurposeForm(this);
+            purposeForm.BringToFront();
+            WinAPI.AnimateWindow(purposeForm.Handle, 500, WinAPI.HOR_NEGATIVE);
             purposeForm.Show();
+
         }
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             if (IsValidForm() == true)
             {
-                if (IsValidForm())
+                UserModel m1 = new UserModel(entryIDValue.textBox1.Text);
+                if (GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
                 {
-                    UserModel m1 = new UserModel(entryIDValue.Text);
-                    if (GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
-                    {
-                        LogIn();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Your ID is not registered, Ask the Admin for more information", "Get an Administrator for more information", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-
+                    LogIn();
+                }
+                else
+                {
+                    MessageBox.Show("Your ID is not registered, Ask the Admin for more information", "Get an Administrator for more information", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             else
@@ -56,7 +55,7 @@ namespace LogAppForms
         private bool IsValidForm()
         {
             bool isValid = true;
-            if(entryIDValue.Text.Length == 0)
+            if(entryIDValue.textBox1.Text.Length == 0)
             {
                 isValid = false;
             }
@@ -72,16 +71,11 @@ namespace LogAppForms
 
         private void button3_Click(object sender, EventArgs e)
         {
+            panel2.Visible = false;
             UserForm userForm = new UserForm();
+            userForm.BringToFront();
+            WinAPI.AnimateWindow(userForm.Handle, 500, WinAPI.HOR_NEGATIVE);
             userForm.Show();
-        }
-
-        private void entryIDValue_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.KeyCode == Keys.Return)
-            {
-                button1_Click(sender, e);
-            }
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
@@ -113,5 +107,11 @@ namespace LogAppForms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+        public void EntryForm_Load(object sender, EventArgs e)
+        {
+            this.Activate();
+        }
+
     }
 }

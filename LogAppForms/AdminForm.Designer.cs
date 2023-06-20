@@ -63,18 +63,6 @@ namespace LogAppForms
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.Inventory = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.roundedPanel3 = new LogAppForms.RoundedPanel();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.roundedPanel2 = new LogAppForms.RoundedPanel();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.roundedPanel1 = new LogAppForms.RoundedPanel();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -96,21 +84,34 @@ namespace LogAppForms
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.popupNotifier1 = new Tulpep.NotificationWindow.PopupNotifier();
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.roundedPanel3 = new LogAppForms.RoundedPanel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.roundedPanel2 = new LogAppForms.RoundedPanel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.roundedPanel1 = new LogAppForms.RoundedPanel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.Inventory.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.roundedPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.roundedPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.roundedPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -369,127 +370,6 @@ namespace LogAppForms
             this.panel2.Size = new System.Drawing.Size(461, 112);
             this.panel2.TabIndex = 9;
             // 
-            // roundedPanel3
-            // 
-            this.roundedPanel3.BackColor = System.Drawing.Color.SpringGreen;
-            this.roundedPanel3.Controls.Add(this.pictureBox5);
-            this.roundedPanel3.Controls.Add(this.label10);
-            this.roundedPanel3.Controls.Add(this.label11);
-            this.roundedPanel3.Location = new System.Drawing.Point(328, 3);
-            this.roundedPanel3.Name = "roundedPanel3";
-            this.roundedPanel3.Size = new System.Drawing.Size(130, 106);
-            this.roundedPanel3.TabIndex = 12;
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox5.BackgroundImage")));
-            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox5.Location = new System.Drawing.Point(18, 3);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(31, 35);
-            this.pictureBox5.TabIndex = 13;
-            this.pictureBox5.TabStop = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(69, 16);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(58, 12);
-            this.label10.TabIndex = 10;
-            this.label10.Text = "Condition";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Arial Rounded MT Bold", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(11, 60);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(116, 37);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "GOOD";
-            // 
-            // roundedPanel2
-            // 
-            this.roundedPanel2.BackColor = System.Drawing.Color.Silver;
-            this.roundedPanel2.Controls.Add(this.pictureBox4);
-            this.roundedPanel2.Controls.Add(this.label8);
-            this.roundedPanel2.Controls.Add(this.label9);
-            this.roundedPanel2.Location = new System.Drawing.Point(180, 3);
-            this.roundedPanel2.Name = "roundedPanel2";
-            this.roundedPanel2.Size = new System.Drawing.Size(130, 106);
-            this.roundedPanel2.TabIndex = 11;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(12, 3);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(31, 35);
-            this.pictureBox4.TabIndex = 12;
-            this.pictureBox4.TabStop = false;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(49, 16);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(78, 12);
-            this.label8.TabIndex = 10;
-            this.label8.Text = "Overall Items";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(45, 45);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(82, 55);
-            this.label9.TabIndex = 9;
-            this.label9.Text = "24\r\n";
-            // 
-            // roundedPanel1
-            // 
-            this.roundedPanel1.BackColor = System.Drawing.Color.SkyBlue;
-            this.roundedPanel1.Controls.Add(this.pictureBox3);
-            this.roundedPanel1.Controls.Add(this.label7);
-            this.roundedPanel1.Controls.Add(this.label6);
-            this.roundedPanel1.Location = new System.Drawing.Point(3, 3);
-            this.roundedPanel1.Name = "roundedPanel1";
-            this.roundedPanel1.Size = new System.Drawing.Size(146, 106);
-            this.roundedPanel1.TabIndex = 0;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(4, 3);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(31, 35);
-            this.pictureBox3.TabIndex = 11;
-            this.pictureBox3.TabStop = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(41, 16);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(102, 12);
-            this.label7.TabIndex = 10;
-            this.label7.Text = "Unreturned Items";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(61, 45);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(82, 55);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "24\r\n";
-            // 
             // chart2
             // 
             chartArea2.Name = "ChartArea1";
@@ -514,7 +394,8 @@ namespace LogAppForms
             this.listView2.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader5,
-            this.columnHeader8});
+            this.columnHeader8,
+            this.columnHeader9});
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(3, 47);
             this.listView2.Name = "listView2";
@@ -639,9 +520,9 @@ namespace LogAppForms
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(104, 34);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(149, 13);
+            this.label4.Size = new System.Drawing.Size(176, 13);
             this.label4.TabIndex = 8;
-            this.label4.Text = "LOG MONITORING SYSTEM";
+            this.label4.Text = "CCIT LOG MONITORING SYSTEM";
             // 
             // button7
             // 
@@ -722,6 +603,132 @@ namespace LogAppForms
             this.popupNotifier1.TitleFont = new System.Drawing.Font("Segoe UI", 9F);
             this.popupNotifier1.TitleText = null;
             // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Unreturned Items";
+            this.columnHeader9.Width = 125;
+            // 
+            // roundedPanel3
+            // 
+            this.roundedPanel3.BackColor = System.Drawing.Color.SpringGreen;
+            this.roundedPanel3.Controls.Add(this.pictureBox5);
+            this.roundedPanel3.Controls.Add(this.label10);
+            this.roundedPanel3.Controls.Add(this.label11);
+            this.roundedPanel3.Location = new System.Drawing.Point(328, 3);
+            this.roundedPanel3.Name = "roundedPanel3";
+            this.roundedPanel3.Size = new System.Drawing.Size(130, 106);
+            this.roundedPanel3.TabIndex = 12;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox5.BackgroundImage")));
+            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox5.Location = new System.Drawing.Point(18, 3);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox5.TabIndex = 13;
+            this.pictureBox5.TabStop = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(69, 16);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 12);
+            this.label10.TabIndex = 10;
+            this.label10.Text = "Condition";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Arial Rounded MT Bold", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(11, 60);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(116, 37);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "GOOD";
+            // 
+            // roundedPanel2
+            // 
+            this.roundedPanel2.BackColor = System.Drawing.Color.Silver;
+            this.roundedPanel2.Controls.Add(this.pictureBox4);
+            this.roundedPanel2.Controls.Add(this.label8);
+            this.roundedPanel2.Controls.Add(this.label9);
+            this.roundedPanel2.Location = new System.Drawing.Point(173, 3);
+            this.roundedPanel2.Name = "roundedPanel2";
+            this.roundedPanel2.Size = new System.Drawing.Size(130, 106);
+            this.roundedPanel2.TabIndex = 11;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(12, 3);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox4.TabIndex = 12;
+            this.pictureBox4.TabStop = false;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(49, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(78, 12);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Overall Items";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(41, 45);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(53, 55);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "0";
+            // 
+            // roundedPanel1
+            // 
+            this.roundedPanel1.BackColor = System.Drawing.Color.SkyBlue;
+            this.roundedPanel1.Controls.Add(this.pictureBox3);
+            this.roundedPanel1.Controls.Add(this.label7);
+            this.roundedPanel1.Controls.Add(this.label6);
+            this.roundedPanel1.Location = new System.Drawing.Point(3, 3);
+            this.roundedPanel1.Name = "roundedPanel1";
+            this.roundedPanel1.Size = new System.Drawing.Size(146, 106);
+            this.roundedPanel1.TabIndex = 0;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(4, 3);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(31, 35);
+            this.pictureBox3.TabIndex = 11;
+            this.pictureBox3.TabStop = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(41, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(102, 12);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Unreturned Items";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(61, 45);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 55);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "0";
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -743,6 +750,11 @@ namespace LogAppForms
             this.Inventory.ResumeLayout(false);
             this.Inventory.PerformLayout();
             this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.roundedPanel3.ResumeLayout(false);
             this.roundedPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
@@ -752,11 +764,6 @@ namespace LogAppForms
             this.roundedPanel1.ResumeLayout(false);
             this.roundedPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -804,12 +811,10 @@ namespace LogAppForms
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private Tulpep.NotificationWindow.PopupNotifier popupNotifier1;
         private Panel panel2;
-        private Label label6;
         private Label label7;
         private RoundedPanel roundedPanel1;
         private RoundedPanel roundedPanel2;
         private Label label8;
-        private Label label9;
         private RoundedPanel roundedPanel3;
         private Label label10;
         private Label label11;
@@ -820,5 +825,8 @@ namespace LogAppForms
         private DateTimePicker dateTimePicker1;
         private Label label12;
         private Label label1;
+        public Label label6;
+        public Label label9;
+        private ColumnHeader columnHeader9;
     }
 }

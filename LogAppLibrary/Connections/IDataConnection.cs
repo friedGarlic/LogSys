@@ -16,6 +16,8 @@
 
         bool IsItemDuplicate(ItemModel item_model);
         bool IsStudentIdDuplicate(UserModel usermodel);
-        void GetDuration();
+
+        void AddUnreturnedItem(string name, decimal q);
+        void SubUnreturnedItem(string name, decimal q);
     }
 }

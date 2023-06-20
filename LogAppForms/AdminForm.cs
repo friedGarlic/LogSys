@@ -27,7 +27,6 @@ namespace LogAppForms
 
         private bool drag = false;
         private Point start_point = new Point(0, 0);
-        private RoundedPanel roundedPanel;
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -57,10 +56,9 @@ namespace LogAppForms
             LoadPieChart();
             filter();
             PopulateListView();
-            NotifWnd();
-            roundedPanel = new RoundedPanel();
-            roundedPanel.Location = new Point(10, 10); // Set the desired location
-            roundedPanel.Size = new Size(200, 200);
+            NotifWnd(); 
+            GetUnreturnedItem();
+            GetOverAllItems();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -92,7 +90,6 @@ namespace LogAppForms
                 this.Location = new Point(p.X - start_point.X, p.Y - start_point.Y); ;
             }
         }
-
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -581,7 +578,8 @@ namespace LogAppForms
                 listView2.Items.Add(new ListViewItem(new string[]
                                     {
                                         dr[1].ToString(),
-                                        dr[2].ToString()
+                                        dr[2].ToString(),
+                                        dr[6].ToString()
                                     }));
             }
         }
@@ -832,6 +830,23 @@ namespace LogAppForms
 
             return totalDuration;
         }
+        public void GetUnreturnedItem()
+        {
+            _conn.Open();
+            cmd = new SqlCommand("SELECT SUM(UnreturnedItems) FROM dbo.Items", _conn);
+            int overallUnreturnedItems = (int)cmd.ExecuteScalar();
+            _conn.Close();
 
+            label6.Text = overallUnreturnedItems.ToString();
+        }
+        public void GetOverAllItems()
+        {
+            _conn.Open();
+            cmd = new SqlCommand("SELECT SUM(Quantity) FROM dbo.Items", _conn);
+            int overallUnreturnedItems = (int)cmd.ExecuteScalar();
+            _conn.Close();
+
+            label9.Text = overallUnreturnedItems.ToString();
+        }
     }
 }

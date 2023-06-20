@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.ServiceModel.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +15,10 @@ namespace LogAppForms
 {
     public partial class UserForm : Form
     {
+
+        private bool drag = false;
+        private Point start_point = new Point(0, 0);
+        EntryForm entryForm = new EntryForm();
 
         public UserForm()
         {
@@ -28,7 +33,7 @@ namespace LogAppForms
 
                 if (adminPass.ShowDialog() == DialogResult.OK)
                 {
-                    UserModel m1 = new UserModel(studentID_value.Text);
+                    UserModel m1 = new UserModel(studentID_value.textBox1.Text);
                     if (!GlobalConfig.DataConnections.IsStudentIdDuplicate(m1))
                     {
                         CreateUser();
@@ -41,6 +46,7 @@ namespace LogAppForms
                 else
                 {
                     this.Close();
+                    entryForm.Visible = true;
                 }
             }
             else
@@ -51,11 +57,11 @@ namespace LogAppForms
         public void CreateUser()
         {
             UserModel user = new UserModel(
-                        studentID_value.Text,
-                        age_value.Text,
-                        contactInfo_value.Text,
-                        firstName_value.Text,
-                        lastName_value.Text
+                        studentID_value.textBox1.Text,
+                        age_value.textBox1.Text,
+                        contactInfo_value.textBox1.Text,
+                        firstName_value.textBox1.Text,
+                        lastName_value.textBox1.Text
                     );
 
             GlobalConfig.DataConnections.CreateUser(user);
@@ -65,28 +71,54 @@ namespace LogAppForms
         }
         public bool validateForm()
         {
-            if (studentID_value.TextLength == 0)
+            if (studentID_value.textBox1.TextLength == 0)
             {
                 return false;
             }
-            if (age_value.TextLength == 0 || age_value.TextLength > 3)
+            if (age_value.textBox1.TextLength == 0 || age_value.textBox1.TextLength > 3)
             {
                 return false;
             }
-            if (firstName_value.TextLength == 0)
+            if (firstName_value.textBox1.TextLength == 0)
             {
                 return false;
             }
-            if (lastName_value.TextLength == 0)
+            if (lastName_value.textBox1.TextLength == 0)
             {
                 return false;
             }
-            if (contactInfo_value.TextLength == 0)
+            if (contactInfo_value.textBox1.TextLength == 0)
             {
                 return false;
             }
 
             return true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            entryForm.Visible = true;
+            this.Close();
+        }
+
+        private void UserForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            drag = true;
+            start_point = new Point(e.X, e.Y);
+        }
+
+        private void UserForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (drag)
+            {
+                Point p = PointToScreen(e.Location);
+                this.Location = new Point(p.X - start_point.X, p.Y - start_point.Y); ;
+            }
+        }
+
+        private void UserForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            drag = false;
         }
     }
 }
