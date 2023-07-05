@@ -47,7 +47,7 @@ namespace LogAppForms
         {
             if (ValidateForm()) 
             {
-                if (userControl21.radioButton1.Checked == true)
+                if (userControl21.radioButton1.Checked == true) //if borrowing
                 {
                     val = Borrow;
                     q = userControl21.numericUpDown1.Value;
@@ -55,11 +55,11 @@ namespace LogAppForms
                     if (IsItemAvailable(cmb)) //if itemname quantity is > 0
                     {
                         PurposeModel model = new PurposeModel(q, val, cmb);
-                        UserModel u_model = new UserModel(entryForm.entryIDValue.Text);
+                        UserModel u_model = new UserModel(entryForm.entryIDValue.textBox1.Text);
 
-                        RemoveQuantity();
                         GlobalConfig.DataConnections.CreatePurpose(u_model, model);
                         GlobalConfig.DataConnections.AddUnreturnedItem(cmb,q);
+                        RemoveQuantity();
                         MessageBox.Show("Success, Please return the borrowed Item!");
                         Close();
                     }
@@ -69,7 +69,7 @@ namespace LogAppForms
                     }
 
                 }
-                if (userControl21.radioButton2.Checked == true)
+                if (userControl21.radioButton2.Checked == true) // if returning
                 {
                         val = Return;
                         q = userControl21.numericUpDown1.Value;
@@ -78,31 +78,31 @@ namespace LogAppForms
                         PurposeModel model = new PurposeModel(q, val, cmb);
                         UserModel u_model = new UserModel(entryForm.entryIDValue.textBox1.Text);
 
-                        AddQuantity();
                         GlobalConfig.DataConnections.CreatePurpose(u_model, model);
                         GlobalConfig.DataConnections.SubUnreturnedItem(cmb,q);
+                        AddQuantity();
                         MessageBox.Show("Success, Thank you for Returning the Item!");
                         Close();
                 }
 
-                if (toggle_Switch1.Checked == true || toggle_Switch1.Checked == false)
+                if (userControl21.radioButton2.Checked == false && userControl21.radioButton1.Checked == false)
                 {
-                    string val = "";
-                    if (toggle_Switch1.Checked == true)
-                    {
-                        val = timeIn;
-                    }
-                    if (toggle_Switch1.Checked == false)
-                    {
-                        val = timeOut;
-                    }
-                    PurposeModel model = new PurposeModel(val);
-                    UserModel u_model = new UserModel(entryForm.entryIDValue.textBox1.Text);
+                        string val = "";
+                        if (toggle_Switch1.Checked == true)
+                        {
+                            val = timeIn;
+                        }
+                        if (toggle_Switch1.Checked == false)
+                        {
+                            val = timeOut;
+                        }
+                        PurposeModel model = new PurposeModel(val);
+                        UserModel u_model = new UserModel(entryForm.entryIDValue.textBox1.Text);
 
-                    GlobalConfig.DataConnections.CurrentTime(u_model, model);
-                    MessageBox.Show("Success, Mind the other students!");
+                        GlobalConfig.DataConnections.CurrentTime(u_model, model);
+                        MessageBox.Show("Success, Mind the other students!");
 
-                    Close();
+                        Close();
                 }
             }
             else

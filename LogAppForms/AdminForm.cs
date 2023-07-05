@@ -155,7 +155,7 @@ namespace LogAppForms
 
         private void button8_Click(object sender, EventArgs e)
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\LogSysReport.pdf";
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\LogSysReport.pdf"; //file path straight to desktop path
             MessageBox.Show("Saved as PDF to Desktop");
             SaveAsPDF(filePath);
         }
@@ -250,7 +250,7 @@ namespace LogAppForms
 
         private void button9_Click(object sender, EventArgs e)
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\EkisReport.pdf";
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\LogReport.pdf";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -597,7 +597,7 @@ namespace LogAppForms
                     {
                         while (reader.Read())
                         {
-                            DateTime dateTimeValue = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
+                            DateTime dateTimeValue = reader.GetDateTime(0);
                             Console.WriteLine(dateTimeValue);
                         }
                     }
@@ -627,8 +627,8 @@ namespace LogAppForms
                     {
                         while (reader.Read())
                         {
-                            DateTime currentDateTime = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
-                            string eventType = reader.GetString(1); // Assuming TimeInOut is of type VARCHAR
+                            DateTime currentDateTime = reader.GetDateTime(0); 
+                            string eventType = reader.GetString(1); 
 
                             if (eventType == "Time In")
                             {
@@ -673,14 +673,14 @@ namespace LogAppForms
             int[] columnWidths = new int[columnCount];
             int tableWidth = 0;
 
-            // Calculate the width of each column
+            // calculate the width of each column
             for (int i = 0; i < columnCount; i++)
             {
                 columnWidths[i] = (int)gfx.MeasureString(listView1.Columns[i].Text, font).Width + cellPadding * 2;
                 tableWidth += columnWidths[i];
             }
 
-            // Draw table header
+            // draw table header
             for (int i = 0; i < columnCount; i++)
             {
                 gfx.DrawRectangle(XPens.Black, x, y, columnWidths[i], cellHeight);
@@ -690,11 +690,11 @@ namespace LogAppForms
 
             y += cellHeight;
 
-            // Draw table rows
+            // draw table rows
             foreach (ListViewItem item in listView1.Items)
             {
                 x = 10;
-                int currentColumnCount = item.SubItems.Count; // Get the number of columns for the current row
+                int currentColumnCount = item.SubItems.Count; // get the number of columns for the current row
 
                 for (int i = 0; i < currentColumnCount; i++)
                 {
@@ -704,7 +704,7 @@ namespace LogAppForms
                     x += columnWidths[i];
                 }
 
-                // Handle extra columns for rows with fewer columns
+                // handle extra columns for rows with fewer columns
                 if (currentColumnCount < columnCount)
                 {
                     int remainingColumns = columnCount - currentColumnCount;
@@ -718,7 +718,7 @@ namespace LogAppForms
                 y += cellHeight;
             }
 
-            // Draw the chart
+            // draw the chart
             PdfPage chartPage = document.AddPage();
             XGraphics chartGfx = XGraphics.FromPdfPage(chartPage);
             XImage xImage = null;
@@ -744,38 +744,6 @@ namespace LogAppForms
             Security security = new Security();
             security.Show();
         }
-        /*private void LoadDateData(DateTime startDate, DateTime endDate)
-        {
-            using (SqlConnection connection = new SqlConnection(GlobalConfig.ConnectString("SearchCN")))
-            {
-                connection.Open();
-
-                string sqlQuery = "SELECT * FROM DateTimeTable WHERE CurDateTime >= @StartDate AND CurDateTime <= @EndDate ORDER BY CurDateTime";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@StartDate", startDate);
-                    command.Parameters.AddWithValue("@EndDate", endDate);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        foreach (var series in chart1.Series)
-                        {
-                            series.Points.Clear();
-                        }
-                        while (reader.Read())
-                        {
-                            string studentId = reader.GetString(1);
-
-                            UserModel model = new UserModel(studentId);
-                            TimeSpan totalDuration = GetTotalDuration(model);
-
-                            chart1.Series["Minutes"].Points.AddXY(studentId, totalDuration.Minutes);
-                        }
-                    }
-                }
-
-                connection.Close();
-            }
-        }*/
         private TimeSpan GetTotalDurationByDate(DateTime startDatePicker, DateTime endDatePicker, UserModel userModel)
         {
             DateTime startDate = startDatePicker;
@@ -798,8 +766,8 @@ namespace LogAppForms
                     {
                         while (reader.Read())
                         {
-                            DateTime currentDateTime = reader.GetDateTime(0); // Assuming CurDateTime is of type DATETIME
-                            string eventType = reader.GetString(1); // Assuming TimeInOut is of type VARCHAR
+                            DateTime currentDateTime = reader.GetDateTime(0); // pag CurDateTime is of type DATETIME
+                            string eventType = reader.GetString(1); // pag TimeInOut is of type VARCHAR
 
                             if (currentDateTime >= startDate && currentDateTime <= endDate)
                             {
