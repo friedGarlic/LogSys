@@ -155,9 +155,9 @@ namespace LogAppForms
 
         private void button8_Click(object sender, EventArgs e)
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\LogSysReport.pdf"; //file path straight to desktop path
-            MessageBox.Show("Saved as PDF to Desktop");
-            SaveAsPDF(filePath);
+            PrintedBy printedBy = new PrintedBy(this);
+            printedBy.Show();
+                
         }
 
         private void PrintListView()
@@ -656,7 +656,7 @@ namespace LogAppForms
 
             return totalDuration;
         }
-        private void SaveAsPDF(string filePath)
+        public void SaveAsPDF(string filePath, string printedBy) /////////public method careful
         {
             PdfDocument document = new PdfDocument();
             PdfPage page = document.AddPage();
@@ -680,27 +680,53 @@ namespace LogAppForms
                 tableWidth += columnWidths[i];
             }
 
+            y += cellHeight;
+
+            // Draw header
+            string headerText = "PRMSU SAN MARCELINO CCIT BUILDING LOG REPORT";
+            gfx.DrawString(headerText, new XFont("Arial", 12, XFontStyle.Bold), XBrushes.Black, 
+                new XPoint(page.Width / 2 - gfx.MeasureString(headerText, new XFont("Arial", 12, XFontStyle.Bold)).Width / 2, y));
+
+            y += cellHeight;
+
+            int availableHeight = (int)page.Height - y - cellHeight; // calculate the available height for table content
+
             // draw table header
             for (int i = 0; i < columnCount; i++)
             {
                 gfx.DrawRectangle(XPens.Black, x, y, columnWidths[i], cellHeight);
-                gfx.DrawString(listView1.Columns[i].Text, font, XBrushes.Black, new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
+                gfx.DrawString(listView1.Columns[i].Text, font, XBrushes.Black, 
+                    new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
                 x += columnWidths[i];
             }
 
             y += cellHeight;
 
             // draw table rows
-            foreach (ListViewItem item in listView1.Items)
+            int rowIndex = 0;
+            bool isNewPage = false;
+
+            while (rowIndex < rowCount)
             {
                 x = 10;
-                int currentColumnCount = item.SubItems.Count; // get the number of columns for the current row
+                int currentColumnCount = listView1.Items[rowIndex].SubItems.Count; // get the number of columns for the current row
+
+                // check if the remaining height is not enough for the current row
+                if (y + cellHeight > page.Height - cellHeight)
+                {
+                    // Add a new page
+                    page = document.AddPage();
+                    gfx = XGraphics.FromPdfPage(page);
+                    y = 10;
+                    isNewPage = true;
+                }
 
                 for (int i = 0; i < currentColumnCount; i++)
                 {
-                    string cellText = item.SubItems[i].Text;
+                    string cellText = listView1.Items[rowIndex].SubItems[i].Text;
                     gfx.DrawRectangle(XPens.Black, x, y, columnWidths[i], cellHeight);
-                    gfx.DrawString(cellText, font, XBrushes.Black, new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
+                    gfx.DrawString(cellText, font, XBrushes.Black, 
+                        new XRect(x + cellPadding, y, columnWidths[i] - cellPadding * 2, cellHeight), XStringFormats.Center);
                     x += columnWidths[i];
                 }
 
@@ -716,6 +742,14 @@ namespace LogAppForms
                 }
 
                 y += cellHeight;
+                rowIndex++;
+
+                // check if a new page was added and adjust the y position accordingly
+                if (isNewPage)
+                {
+                    y = 10;
+                    isNewPage = false;
+                }
             }
 
             // draw the chart
@@ -726,8 +760,13 @@ namespace LogAppForms
             {
                 chart1.DrawToBitmap(chartImage, new Rectangle(0, 0, chart1.Width, chart1.Height));
                 xImage = XImage.FromGdiPlusImage(chartImage);
-                chartGfx.DrawImage(xImage, new XRect(chartPage.Width - chart1.Width - 10, chartPage.Height - chart1.Height - 10, chart1.Width, chart1.Height));
+                chartGfx.DrawImage(xImage, 
+                    new XRect(chartPage.Width - chart1.Width - 10, chartPage.Height - chart1.Height - 10, chart1.Width, chart1.Height));
             }
+
+            gfx.DrawString($"Printed By: {printedBy}", font, XBrushes.Black, new XPoint(10, page.Height - cellHeight));
+            gfx.DrawString($"Printed At: {DateTime.Now.ToString()}", font, XBrushes.Black, new XPoint(page.Width - 150, page.Height - cellHeight));
+
 
             document.Save(filePath);
             document.Close();

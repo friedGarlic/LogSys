@@ -128,3 +128,4 @@ C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogEntryForm.csproj.CopyC
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.exe
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.pdb
 C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.UserControl1.resources
+C:\Users\Rem\source\repos\LogSys\LogAppForms\obj\Debug\LogAppForms.PrintedBy.resources

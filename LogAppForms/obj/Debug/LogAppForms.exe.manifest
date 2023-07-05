@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="10552792">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LogAppForms.exe" size="10554840">
       <assemblyIdentity name="LogAppForms" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>2Tv18pw85I0A9xn4EPpHEwbnr2VfvJzaxLEk/3ZiL6s=</dsig:DigestValue>
+        <dsig:DigestValue>lCFE8Avy1jADnqY+pvyS9QGwQpJKUM6Jw/AuwQjSWnU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
