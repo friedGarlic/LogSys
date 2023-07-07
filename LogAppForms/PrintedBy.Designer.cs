@@ -70,7 +70,7 @@
             this.register_button.Name = "register_button";
             this.register_button.Size = new System.Drawing.Size(242, 35);
             this.register_button.TabIndex = 22;
-            this.register_button.Text = "Register";
+            this.register_button.Text = "Submit";
             this.register_button.UseVisualStyleBackColor = true;
             this.register_button.Click += new System.EventHandler(this.register_button_Click);
             // 

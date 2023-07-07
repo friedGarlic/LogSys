@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace LogAppForms
 {
@@ -672,6 +674,7 @@ namespace LogAppForms
             int columnCount = listView1.Columns.Count;
             int[] columnWidths = new int[columnCount];
             int tableWidth = 0;
+            int pageCount = 1;
 
             // calculate the width of each column
             for (int i = 0; i < columnCount; i++)
@@ -682,15 +685,51 @@ namespace LogAppForms
 
             y += cellHeight;
 
+            Bitmap logoBitmap = Properties.Resources.prmsu_logo;
+
+            // Convert the Bitmap to a MemoryStream
+            MemoryStream memoryStream = new MemoryStream();
+            logoBitmap.Save(memoryStream, ImageFormat.Png);
+
+            // Create the XImage from the MemoryStream
+            XImage logoImage = XImage.FromStream(memoryStream);
+
+            // Determine the size and position of the logo
+            int logoWidth = 70;
+            int logoHeight = 70;
+            int logoX = 80;
+            int logoY = y - 25; // Adjust the Y position based on the desired alignment
+
+            // Draw the logo on the page
+            gfx.DrawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+
             // Draw header
-            string headerText = "PRMSU SAN MARCELINO CCIT BUILDING LOG REPORT";
+            string headerText = "President Ramon Magsaysay State University";
             gfx.DrawString(headerText, new XFont("Arial", 12, XFontStyle.Bold), XBrushes.Black, 
                 new XPoint(page.Width / 2 - gfx.MeasureString(headerText, new XFont("Arial", 12, XFontStyle.Bold)).Width / 2, y));
 
-            y += cellHeight;
+            y += 10;
+            string AdditionalText = "Nagbunga, San Marcelino, Zambales 2207";
+            XSize additionalTextSize = gfx.MeasureString(AdditionalText, font);
+            XPoint additionalTextPosition = new XPoint(page.Width / 2 - additionalTextSize.Width / 2, y);
+            gfx.DrawString(AdditionalText, font, XBrushes.Black, additionalTextPosition);
+
+            y += 10;
+            string AdditionalText1 = $"CCIT Laboratory Log Report ({DateTime.Now.Year})";
+            XSize additionalTextSize1 = gfx.MeasureString(AdditionalText1, font);
+            XPoint additionalTextPosition1 = new XPoint(page.Width / 2 - additionalTextSize1.Width / 2, y);
+            gfx.DrawString(AdditionalText1, font, XBrushes.Black, additionalTextPosition1);
+            //printed by
+
+            y += 10;
+            string AdditionalText2 = $"{printedBy}";
+            XSize additionalTextSize2 = gfx.MeasureString(AdditionalText2, font);
+            XPoint additionalTextPosition2 = new XPoint(page.Width / 2 - additionalTextSize2.Width / 2, y);
+            gfx.DrawString(AdditionalText2, font, XBrushes.Black, additionalTextPosition2);
 
             int availableHeight = (int)page.Height - y - cellHeight; // calculate the available height for table content
 
+            y += cellHeight;
             // draw table header
             for (int i = 0; i < columnCount; i++)
             {
@@ -749,7 +788,10 @@ namespace LogAppForms
                 {
                     y = 10;
                     isNewPage = false;
+                    pageCount += 1;
                 }
+                gfx.DrawString($"Printed By: {DateTime.Now.ToString()} {printedBy}", font, XBrushes.Black, new XPoint(10, page.Height - cellHeight));
+                gfx.DrawString($"Page: {pageCount}", font, XBrushes.Black, new XPoint(page.Width - 150, page.Height - cellHeight));
             }
 
             // draw the chart
@@ -763,10 +805,6 @@ namespace LogAppForms
                 chartGfx.DrawImage(xImage, 
                     new XRect(chartPage.Width - chart1.Width - 10, chartPage.Height - chart1.Height - 10, chart1.Width, chart1.Height));
             }
-
-            gfx.DrawString($"Printed By: {printedBy}", font, XBrushes.Black, new XPoint(10, page.Height - cellHeight));
-            gfx.DrawString($"Printed At: {DateTime.Now.ToString()}", font, XBrushes.Black, new XPoint(page.Width - 150, page.Height - cellHeight));
-
 
             document.Save(filePath);
             document.Close();
